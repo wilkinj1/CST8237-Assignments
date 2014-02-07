@@ -6,6 +6,7 @@
 #include "NewGameEngine.h"
 #include <d3d11.h>
 #include <assert.h>
+#include "SceneManager.h"
 
 #define MAX_LOADSTRING 100
 

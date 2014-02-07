@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "NewGameEngine.h"
 #include <d3d11.h>
+#include "SceneManager.h"
 
 NewGameEngine::NewGameEngine():
 	mD3DDevice(NULL),
 	mD3DDeviceContext(NULL),
 	mD3DSwapChain(NULL),
-	mD3DBackBuffer(NULL)
+	mD3DBackBuffer(NULL),
+	mSceneManager(NULL)
 {
 }
 
@@ -115,7 +117,6 @@ bool NewGameEngine::Initialize(HWND hWnd)
 		}
 	}
 
-	ID3D11Texture2D *backBufferTexture;
 	if(SUCCEEDED(result))
 	{
 		ID3D11Texture2D *backBufferTexture;
@@ -146,6 +147,9 @@ bool NewGameEngine::Initialize(HWND hWnd)
 				// Setting our viewport.
 				mD3DDeviceContext->RSSetViewports(1, &mainViewport);
 
+				// Initialize our scene manager now that we know everything's been properly set up.
+				mSceneManager->Initialize();
+
 				// Now that we know that we've properly created our viewport, we can report a success.
 				successful = true;
 			}
@@ -165,6 +169,11 @@ bool NewGameEngine::Initialize(HWND hWnd)
 	}
 
 	return successful;
+}
+
+SceneManager* NewGameEngine::GetSceneManager() const
+{
+	return mSceneManager;
 }
 
 void NewGameEngine::Update(float dt)
