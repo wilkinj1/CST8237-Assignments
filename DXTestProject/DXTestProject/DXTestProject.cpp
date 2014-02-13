@@ -47,10 +47,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   }
 
   // intialize stuff
-  NewGameEngine engine;
+  NewGameEngine *engine = NewGameEngine::GetInstance();
 
   // If our engine didn't intialize properly, we're done.
-  assert(engine.Initialize(hWnd));
+  assert(engine->Initialize(hWnd));
 
   hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DXTESTPROJECT));
 
@@ -69,8 +69,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     }
     else
     {
-		// do stuff
-		engine.Render();
+		  // do stuff
+		  engine->Render();
     }
   };
 

@@ -5,6 +5,11 @@
 
 #pragma once
 
+struct ID3D11Buffer;
+struct ID3D11VertexShader;
+struct ID3D11PixelShader;
+struct ID3D11InputLayout;
+
 class Player
 {
 public:
@@ -22,4 +27,10 @@ public:
 	/** Render/draw our object.
 	 */
 	virtual void Render();
+
+ protected:
+   ID3D11Buffer *mVertexBuffer;
+   ID3D11VertexShader *mVertexShader;
+   ID3D11PixelShader *mPixelShader;
+   ID3D11InputLayout *mInputLayout;
 };

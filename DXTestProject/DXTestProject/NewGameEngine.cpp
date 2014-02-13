@@ -3,6 +3,27 @@
 #include <d3d11.h>
 #include "SceneManager.h"
 
+NewGameEngine* NewGameEngine::sGameEngineInstance = NULL;
+
+NewGameEngine* NewGameEngine::GetInstance()
+{
+  if(!sGameEngineInstance)
+  {
+    sGameEngineInstance = new NewGameEngine();
+  }
+
+  return sGameEngineInstance;
+}
+
+void NewGameEngine::DestroyInstance()
+{
+  if(sGameEngineInstance)
+  {
+    delete sGameEngineInstance;
+    sGameEngineInstance = NULL;
+  }
+}
+
 NewGameEngine::NewGameEngine():
 	mD3DDevice(NULL),
 	mD3DDeviceContext(NULL),
@@ -185,5 +206,27 @@ void NewGameEngine::Render()
   static float clearColor[] = { 0.0f, 1.0f, 0.0f, 1.0f };
   mD3DDeviceContext->ClearRenderTargetView(mD3DBackBuffer, clearColor);
 
+  // DRAWING STUFF GOES HERE.
+
   mD3DSwapChain->Present(0, 0);
+}
+
+ID3D11Device* NewGameEngine::GetD3DDevice()
+{
+  return mD3DDevice;
+}
+
+ID3D11DeviceContext* NewGameEngine::GetD3DDeviceContext()
+{
+  return mD3DDeviceContext;
+}
+
+IDXGISwapChain* NewGameEngine::GetD3DSwapChain()
+{
+  return mD3DSwapChain;
+}
+
+ID3D11RenderTargetView* NewGameEngine::GetD3DBackBuffer()
+{
+  return mD3DBackBuffer;
 }

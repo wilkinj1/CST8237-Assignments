@@ -10,7 +10,9 @@ class SceneManager;
 class NewGameEngine
 {
 public:
-	NewGameEngine();
+  static NewGameEngine* GetInstance();
+  static void DestroyInstance();
+
 	virtual ~NewGameEngine();
 
 	bool Initialize(HWND hWnd);
@@ -19,7 +21,15 @@ public:
 
 	SceneManager *GetSceneManager() const;
 
+	ID3D11Device *GetD3DDevice();
+	ID3D11DeviceContext *GetD3DDeviceContext();
+	IDXGISwapChain *GetD3DSwapChain();
+	ID3D11RenderTargetView *GetD3DBackBuffer();
+
 protected:
+  NewGameEngine();
+  static NewGameEngine *sGameEngineInstance;
+
 	ID3D11Device *mD3DDevice;
 	ID3D11DeviceContext *mD3DDeviceContext;
 	IDXGISwapChain *mD3DSwapChain;
