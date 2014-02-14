@@ -169,6 +169,7 @@ bool NewGameEngine::Initialize(HWND hWnd)
 				mD3DDeviceContext->RSSetViewports(1, &mainViewport);
 
 				// Initialize our scene manager now that we know everything's been properly set up.
+        mSceneManager = new SceneManager();
 				mSceneManager->Initialize();
 
 				// Now that we know that we've properly created our viewport, we can report a success.
@@ -199,6 +200,7 @@ SceneManager* NewGameEngine::GetSceneManager() const
 
 void NewGameEngine::Update(float dt)
 {
+  mSceneManager->Update(dt);
 }
 
 void NewGameEngine::Render()
@@ -207,6 +209,7 @@ void NewGameEngine::Render()
   mD3DDeviceContext->ClearRenderTargetView(mD3DBackBuffer, clearColor);
 
   // DRAWING STUFF GOES HERE.
+  mSceneManager->Render();
 
   mD3DSwapChain->Present(0, 0);
 }

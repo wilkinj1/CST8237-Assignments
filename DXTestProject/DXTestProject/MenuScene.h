@@ -1,19 +1,12 @@
-/* GameScene.h
- * Author: Justin Wilkinson
- * Purpose: An concrete class representing my Game.
- */
-
 #pragma once
 
 #include "Scene.h"
 
-class Player;
-
-class GameScene: public Scene
+class MenuScene: public Scene
 {
 public:
-	GameScene();
-	virtual ~GameScene();
+	MenuScene();
+	virtual ~MenuScene();
 
 	/** Initialize our scene. 
 	 */
@@ -30,7 +23,4 @@ public:
 
   virtual void OnEnter();
   virtual void OnExit();
-
-protected:
-	Player *mPlayer;
 };

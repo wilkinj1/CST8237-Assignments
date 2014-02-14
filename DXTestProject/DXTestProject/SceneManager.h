@@ -34,6 +34,8 @@ public:
 	 */
 	void PopScene();
 
+  void PopAllScenes();
+
 protected:
 	/** The scenes that we're going to manage. */
 	std::vector<Scene *> mScenes;

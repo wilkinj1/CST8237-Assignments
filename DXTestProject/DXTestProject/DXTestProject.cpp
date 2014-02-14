@@ -7,6 +7,9 @@
 #include <d3d11.h>
 #include <assert.h>
 #include "SceneManager.h"
+#include "GameScene.h"
+#include "MenuScene.h"
+#include "GameTimer.h"
 
 #define MAX_LOADSTRING 100
 
@@ -20,6 +23,9 @@ ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int, HWND&);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
+
+GameScene *game = NULL;
+MenuScene *menu = NULL;
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                        _In_opt_ HINSTANCE hPrevInstance,
@@ -52,6 +58,17 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   // If our engine didn't intialize properly, we're done.
   assert(engine->Initialize(hWnd));
 
+  game = new GameScene();
+  game->Initialize();
+
+  menu = new MenuScene();
+  menu->Initialize();
+
+  engine->GetSceneManager()->PushScene(game);
+
+  GameTimer timer;
+  timer.Start();
+
   hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DXTESTPROJECT));
 
   // Main message loop:
@@ -59,7 +76,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   {
 	  /* We use PeekMessage instead of GetMessage because Peek isn't blocking, so that we can
 	     perform any operation we want without having to wait for a Windows message to be received. */
-    if(PeekMessage(&msg, hWnd, 0, 0, PM_REMOVE))
+    if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
       if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
       {
@@ -69,10 +86,27 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     }
     else
     {
-		  // do stuff
-		  engine->Render();
+      if(!timer.IsStopped() && !timer.IsPaused())
+      {
+        // Tick our timer so that we can get the accurate time since the last call.
+        timer.Tick();
+
+        // do stuff
+        engine->Update(timer.GetDeltaTime());
+        engine->Render();
+      }
     }
   };
+
+  // Cleanup.
+    engine->GetSceneManager()->PopAllScenes();
+    delete game;
+    game = NULL;
+
+    delete menu;
+    menu = NULL;
+
+    NewGameEngine::DestroyInstance();
 
   return (int) msg.wParam;
 }
@@ -167,6 +201,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       return DefWindowProc(hWnd, message, wParam, lParam);
     }
     break;
+  case WM_SIZE:
+    {
+      RECT clientRect;
+      GetClientRect(hWnd, &clientRect);
+
+      float screenWidth = clientRect.right - clientRect.left;
+      float screenHeight = clientRect.top - clientRect.bottom;
+
+      // Update your camera's aspect ratio.
+      float aspectRatio = screenWidth / screenHeight;
+    }
+    break;
+
   case WM_PAINT:
     hdc = BeginPaint(hWnd, &ps);
     // TODO: Add any drawing code here...

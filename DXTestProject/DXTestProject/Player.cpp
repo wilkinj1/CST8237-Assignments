@@ -34,11 +34,10 @@ void Player::Initialize()
 {
 	VertexDescription vertices[] = 
 	{
-		VertexDescription(/*position*/ Vector3(0.0f, 0.0f, 0.0f), /*color*/ Vector3(1.0f, 0.0f, 0.0f)),
-		VertexDescription(/*position*/ Vector3(1.0f, 0.0f, 0.0f), /*color*/ Vector3(1.0f, 0.0f, 0.0f)),
-		VertexDescription(/*position*/ Vector3(0.0f, 1.0f, 0.0f), /*color*/ Vector3(1.0f, 0.0f, 0.0f)),
+    VertexDescription(/*position*/ Vector3(0.5f, 0.0f, 0.5f), /*color*/ Vector3(1.0f, 0.0f, 1.0f)),
+		VertexDescription(/*position*/ Vector3(0.0f, 0.0f, 0.5f), /*color*/ Vector3(1.0f, 1.0f, 0.0f)),
+		VertexDescription(/*position*/ Vector3(0.0f, 0.5f, 0.5f), /*color*/ Vector3(1.0f, 0.0f, 1.0f)),
 	};
-	int numberOfVertices = sizeof(vertices) / sizeof(VertexDescription);
 
 	// Creating a description of our buffer.
 	D3D11_BUFFER_DESC vertexBufferDesc;
@@ -111,8 +110,9 @@ void Player::Initialize()
 
   D3D11_INPUT_ELEMENT_DESC elementDescriptions[] =
   {
-    position,
-    colour
+    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, sizeof(Vector3), D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	
   };
 
   result = device->CreateInputLayout(elementDescriptions,
@@ -135,6 +135,12 @@ void Player::Render()
 {
   unsigned int stride = sizeof(VertexDescription);
   unsigned int offset = 0;
+
+  // We need some way of getting the view and projection matrices here.
+  // Also, we'll need to figure out where the player is positioned, how much they're 
+  // rotated, and how much they're scaled so that we can create our world matrix.
+
+  // From there, it's just r * t * s.
 
   ID3D11Device *device = NewGameEngine::GetInstance()->GetD3DDevice();
   ID3D11DeviceContext *dc = NewGameEngine::GetInstance()->GetD3DDeviceContext();

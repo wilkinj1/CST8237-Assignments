@@ -8,11 +8,13 @@
 #include <vector>
 
 class GameObject;
+class Camera;
 
 class Scene
 {
 public:
-	virtual ~Scene();
+  Scene(): mSceneCamera(NULL) { }
+  virtual ~Scene() { }
 
 	/** Initialize our scene. 
 	 */
@@ -27,7 +29,14 @@ public:
 	 */
 	virtual void Render() = 0;
 
+  virtual void OnEnter() = 0;
+  virtual void OnExit() = 0;
+
+  Camera *const GetSceneCamera();
+
 protected:
 	/** The game objects that our scene is managing. */
 	std::vector<GameObject *> mGameObjects;
+
+  Camera *mSceneCamera;
 };
