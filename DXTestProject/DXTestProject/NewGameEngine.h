@@ -15,9 +15,12 @@ public:
 
 	virtual ~NewGameEngine();
 
-	bool Initialize(HWND hWnd);
+	bool Initialize(HWND hWnd, HINSTANCE hInstance);
 	void Update(float dt);
 	void Render();
+
+  const HWND& GetHWND();
+  const HINSTANCE& GetHINSTANCE();
 
 	SceneManager *GetSceneManager() const;
 
@@ -29,6 +32,9 @@ public:
 protected:
   NewGameEngine();
   static NewGameEngine *sGameEngineInstance;
+
+  HWND hWnd;
+  HINSTANCE hInstance;
 
 	ID3D11Device *mD3DDevice;
 	ID3D11DeviceContext *mD3DDeviceContext;

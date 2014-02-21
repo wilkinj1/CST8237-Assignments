@@ -57,7 +57,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   NewGameEngine *engine = NewGameEngine::GetInstance();
 
   // If our engine didn't intialize properly, we're done.
-  assert(engine->Initialize(hWnd));
+  assert(engine->Initialize(hWnd, hInstance));
 
   game = new GameScene();
   game->Initialize();
@@ -245,34 +245,6 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       return (INT_PTR)TRUE;
     }
     break;
-  }
-  return (INT_PTR)FALSE;
-}
-
-// Message handler for new game dialog box.
-INT_PTR CALLBACK NewGameDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-  UNREFERENCED_PARAMETER(lParam);
-  switch (message)
-  {
-  case WM_INITDIALOG:
-    return (INT_PTR)TRUE;
-
-  case WM_COMMAND:
-    switch (LOWORD(wParam))
-    {
-    case IDNEWGAME:
-      EndDialog(hDlg, LOWORD(wParam));
-      return (INT_PTR)TRUE;
-    case IDEXIT:
-      {
-        HWND mainWindow = GetParent(hDlg);
-        EndDialog(hDlg, LOWORD(wParam));
-
-        DestroyWindow(mainWindow);
-        return (INT_PTR)TRUE;
-      }
-    }
   }
   return (INT_PTR)FALSE;
 }

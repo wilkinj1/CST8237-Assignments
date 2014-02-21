@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "MenuScene.h"
+#include "NewGameEngine.h"
+#include "resource.h"
+
+INT_PTR CALLBACK NewGameDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 MenuScene::MenuScene()
 {
@@ -32,4 +36,32 @@ void MenuScene::Update(float dt)
 
 void MenuScene::Render()
 {
+}
+
+// Message handler for new game dialog box.
+INT_PTR CALLBACK NewGameDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  UNREFERENCED_PARAMETER(lParam);
+  switch (message)
+  {
+  case WM_INITDIALOG:
+    return (INT_PTR)TRUE;
+
+  case WM_COMMAND:
+    switch (LOWORD(wParam))
+    {
+    case IDNEWGAME:
+      EndDialog(hDlg, LOWORD(wParam));
+      return (INT_PTR)TRUE;
+    case IDEXIT:
+      {
+        HWND mainWindow = GetParent(hDlg);
+        EndDialog(hDlg, LOWORD(wParam));
+
+        DestroyWindow(mainWindow);
+        return (INT_PTR)TRUE;
+      }
+    }
+  }
+  return (INT_PTR)FALSE;
 }

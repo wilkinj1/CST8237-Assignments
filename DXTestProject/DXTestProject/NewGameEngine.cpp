@@ -60,9 +60,12 @@ NewGameEngine::~NewGameEngine()
 	}
 }
 
-bool NewGameEngine::Initialize(HWND hWnd)
+bool NewGameEngine::Initialize(HWND hWnd, HINSTANCE hInstance)
 {
 	bool successful = false;
+
+  this->hWnd = hWnd;
+  this->hInstance = hInstance;
 
 	// Creating our swap-chain description
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
@@ -191,6 +194,16 @@ bool NewGameEngine::Initialize(HWND hWnd)
 	}
 
 	return successful;
+}
+
+const HWND& NewGameEngine::GetHWND()
+{
+  return hWnd;
+}
+  
+const HINSTANCE& NewGameEngine::GetHINSTANCE()
+{
+  return hInstance;
 }
 
 SceneManager* NewGameEngine::GetSceneManager() const
