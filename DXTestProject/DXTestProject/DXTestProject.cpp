@@ -23,6 +23,7 @@ ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int, HWND&);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK	NewGameDialog(HWND, UINT, WPARAM, LPARAM);
 
 GameScene *game = NULL;
 MenuScene *menu = NULL;
@@ -247,3 +248,32 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   }
   return (INT_PTR)FALSE;
 }
+
+// Message handler for new game dialog box.
+INT_PTR CALLBACK NewGameDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  UNREFERENCED_PARAMETER(lParam);
+  switch (message)
+  {
+  case WM_INITDIALOG:
+    return (INT_PTR)TRUE;
+
+  case WM_COMMAND:
+    switch (LOWORD(wParam))
+    {
+    case IDNEWGAME:
+      EndDialog(hDlg, LOWORD(wParam));
+      return (INT_PTR)TRUE;
+    case IDEXIT:
+      {
+        HWND mainWindow = GetParent(hDlg);
+        EndDialog(hDlg, LOWORD(wParam));
+
+        DestroyWindow(mainWindow);
+        return (INT_PTR)TRUE;
+      }
+    }
+  }
+  return (INT_PTR)FALSE;
+}
+

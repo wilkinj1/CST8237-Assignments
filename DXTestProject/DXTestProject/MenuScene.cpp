@@ -18,6 +18,8 @@ void MenuScene::OnEnter()
   // Send a message to launch our dialog here.
   // Once it's open, if we've created an event for clicking it, we can launch
   // the game screen.
+
+  // Refer to how the About dialog is created and managed in the DXTestProject.cpp
 }
 
 void MenuScene::OnExit()

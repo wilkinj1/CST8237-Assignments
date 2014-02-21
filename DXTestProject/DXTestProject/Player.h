@@ -13,6 +13,7 @@ struct ID3D11InputLayout;
 class Player
 {
 public:
+  Player();
 	virtual ~Player();
 
 	/** Initialize our object. 
@@ -33,4 +34,7 @@ public:
    ID3D11VertexShader *mVertexShader;
    ID3D11PixelShader *mPixelShader;
    ID3D11InputLayout *mInputLayout;
+
+   // This is a buffer that we'll use to pass our world-view-projection transformation to our shader.
+   ID3D11Buffer *mWVPMatrixBuffer;
 };

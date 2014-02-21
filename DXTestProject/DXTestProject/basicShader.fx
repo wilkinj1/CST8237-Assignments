@@ -1,3 +1,8 @@
+cbuffer MatrixInput
+{
+  matrix wvp;
+};
+
 struct VertexShaderInput
 {
 	float4 position : POSITION;
@@ -14,7 +19,7 @@ FragmentShaderInput BasicVertexShader( VertexShaderInput input )
 {
 	FragmentShaderInput output;
 	
-	output.position = input.position;
+	output.position = mul(input.position, wvp);
 	output.colour = input.colour;
 	return output;
 }
