@@ -1,30 +1,32 @@
 #pragma once
 #include "windows.h"
 
-class ID3D11Device;
-class ID3D11DeviceContext;
-class IDXGISwapChain;
-class ID3D11RenderTargetView;
+class SceneManager;
+class GraphicsManager;
 
 class GameEngine
 {
 public:
-  GameEngine(void);
-  virtual ~GameEngine(void);
+	virtual ~GameEngine(void);
 
-  bool Initialize(HWND hWnd);
-  bool CleanUp();
+	static GameEngine* getInstance();
+	static void shutdown();
 
-  void CreateViewport(size_t height, size_t width);
+	SceneManager* getSceneManager();
+	GraphicsManager* getGraphicsManager();
 
-  void Update(float dt);
-  void Paint();
+	bool isInitialized();
+	bool Initialize(HWND hWnd, HINSTANCE hInstance);
+
+	void Update(float dt);
+	void Paint();
 
 private:
-  ID3D11Device *mD3DDevice;
-  ID3D11DeviceContext *mD3DDeviceContext;
-  IDXGISwapChain *mD3DSwapChain;
+	GameEngine(void);
+	static GameEngine *mEngineInstance;
+	bool mIsInitialized;
 
-  ID3D11RenderTargetView *mD3DBackBufferTarget;
+	SceneManager *mSceneManager;
+	GraphicsManager *mGraphicsManager;
 };
 

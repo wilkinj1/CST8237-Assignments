@@ -5,7 +5,10 @@ struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
 struct ID3D11RenderTargetView;
-class SceneManager;
+struct ID3D11DepthStencilState;
+struct ID3D11DepthStencilView;
+struct ID3D11Texture2D;
+class ScreenManager;
 
 class NewGameEngine
 {
@@ -22,7 +25,7 @@ public:
   const HWND& GetHWND();
   const HINSTANCE& GetHINSTANCE();
 
-	SceneManager *GetSceneManager() const;
+  ScreenManager *GetScreenManager() const;
 
 	ID3D11Device *GetD3DDevice();
 	ID3D11DeviceContext *GetD3DDeviceContext();
@@ -41,5 +44,8 @@ protected:
 	IDXGISwapChain *mD3DSwapChain;
 	ID3D11RenderTargetView *mD3DBackBuffer;
 
-	SceneManager *mSceneManager;
+  ID3D11Texture2D *mD3DDepthBufferTexture;
+  ID3D11DepthStencilView *mD3DDepthStencilView;
+
+  ScreenManager *mScreenManager;
 };

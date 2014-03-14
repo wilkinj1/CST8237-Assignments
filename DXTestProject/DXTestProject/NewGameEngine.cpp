@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "NewGameEngine.h"
 #include <d3d11.h>
-#include "SceneManager.h"
+#include "ScreenManager.h"
 
 NewGameEngine* NewGameEngine::sGameEngineInstance = NULL;
 
@@ -29,35 +29,41 @@ NewGameEngine::NewGameEngine():
 	mD3DDeviceContext(NULL),
 	mD3DSwapChain(NULL),
 	mD3DBackBuffer(NULL),
-	mSceneManager(NULL)
+	mScreenManager(NULL)
 {
 }
 
 NewGameEngine::~NewGameEngine()
 {
-	if(mD3DDevice)
-	{
-		mD3DDevice->Release();
-		mD3DDevice = NULL;
-	}
+  if (mD3DDepthBufferTexture)
+  {
+    mD3DDepthBufferTexture->Release();
+    mD3DDepthBufferTexture = NULL;
+  }
 
-	if(mD3DDeviceContext)
-	{
-		mD3DDeviceContext->Release();
-		mD3DDeviceContext = NULL;
-	}
+  if (mD3DDepthStencilView)
+  {
+    mD3DDepthStencilView->Release();
+    mD3DDepthStencilView = NULL;
+  }
 
-	if(mD3DSwapChain)
-	{
-		mD3DSwapChain->Release();
-		mD3DSwapChain = NULL;
-	}
+  if (mD3DSwapChain)
+  {
+    mD3DSwapChain->Release();
+    mD3DSwapChain = NULL;
+  }
 
-	if(mD3DBackBuffer)
-	{
-		mD3DBackBuffer->Release();
-		mD3DBackBuffer = NULL;
-	}
+  if (mD3DDeviceContext)
+  {
+    mD3DDeviceContext->Release();
+    mD3DDeviceContext = NULL;
+  }
+
+  if (mD3DDevice)
+  {
+    mD3DDevice->Release();
+    mD3DDevice = NULL;
+  }
 }
 
 bool NewGameEngine::Initialize(HWND hWnd, HINSTANCE hInstance)
@@ -156,8 +162,30 @@ bool NewGameEngine::Initialize(HWND hWnd, HINSTANCE hInstance)
 					backBufferTexture->Release();
 				}
 
+        D3D11_TEXTURE2D_DESC depthDesc;
+        ZeroMemory(&depthDesc, sizeof(depthDesc));
+        depthDesc.ArraySize = 1;
+        depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        depthDesc.Usage = D3D11_USAGE_DEFAULT;
+        depthDesc.Width = screenWidth;
+        depthDesc.Height = screenHeight;
+        depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+        depthDesc.MipLevels = 1;
+        depthDesc.SampleDesc.Count = 1;
+        depthDesc.SampleDesc.Quality = 0;
+
+        result = mD3DDevice->CreateTexture2D(&depthDesc, NULL, &mD3DDepthBufferTexture);
+
+        D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
+        ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+        depthStencilViewDesc.Format = depthDesc.Format;
+        depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+        depthStencilViewDesc.Texture2D.MipSlice = 0;
+
+        result = mD3DDevice->CreateDepthStencilView(mD3DDepthBufferTexture, &depthStencilViewDesc, &mD3DDepthStencilView);
+
 				// Tell the device context that we want to render to the render target.
-				mD3DDeviceContext->OMSetRenderTargets(1, &mD3DBackBuffer, NULL);
+        mD3DDeviceContext->OMSetRenderTargets(1, &mD3DBackBuffer, mD3DDepthStencilView);
 
 				// Creating our viewport.
 				D3D11_VIEWPORT mainViewport;
@@ -172,8 +200,7 @@ bool NewGameEngine::Initialize(HWND hWnd, HINSTANCE hInstance)
 				mD3DDeviceContext->RSSetViewports(1, &mainViewport);
 
 				// Initialize our scene manager now that we know everything's been properly set up.
-        mSceneManager = new SceneManager();
-				mSceneManager->Initialize();
+        mScreenManager = new ScreenManager();
 
 				// Now that we know that we've properly created our viewport, we can report a success.
 				successful = true;
@@ -206,23 +233,24 @@ const HINSTANCE& NewGameEngine::GetHINSTANCE()
   return hInstance;
 }
 
-SceneManager* NewGameEngine::GetSceneManager() const
+ScreenManager* NewGameEngine::GetScreenManager() const
 {
-	return mSceneManager;
+  return mScreenManager;
 }
 
 void NewGameEngine::Update(float dt)
 {
-  mSceneManager->Update(dt);
+  mScreenManager->Update(dt);
 }
 
 void NewGameEngine::Render()
 {
   static float clearColor[] = { 0.0f, 1.0f, 0.0f, 1.0f };
   mD3DDeviceContext->ClearRenderTargetView(mD3DBackBuffer, clearColor);
+  mD3DDeviceContext->ClearDepthStencilView(mD3DDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
   // DRAWING STUFF GOES HERE.
-  mSceneManager->Render();
+  mScreenManager->Render();
 
   mD3DSwapChain->Present(0, 0);
 }

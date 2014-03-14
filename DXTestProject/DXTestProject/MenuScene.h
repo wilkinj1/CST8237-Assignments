@@ -5,22 +5,15 @@
 class MenuScene: public Scene
 {
 public:
-	MenuScene();
-	virtual ~MenuScene();
+  MenuScene();
+  ~MenuScene();
 
-	/** Initialize our scene. 
-	 */
-	virtual void Initialize();
+	void Initialize();
+	void Cleanup();
 
-	/** Update our scene.
-	 *	@param dt The current elapsed time since the last frame.
-	 */
-	virtual void Update(float dt);
+	void Update(float dt);
+	void Paint();
 
-	/** Render/draw our scene.
-	 */
-	virtual void Render();
-
-  virtual void OnEnter();
-  virtual void OnExit();
+  void OnEnter();
+  void OnExit();
 };

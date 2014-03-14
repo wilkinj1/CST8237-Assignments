@@ -8,15 +8,15 @@ class Camera;
 struct ID3D11DeviceContext;
 struct ID3D11Device;
 
-class Scene
+class Screen
 {
 public:
-  Scene() : mIsInitialized(false) { }
-  virtual ~Scene() { }
+  Screen() : mIsInitialized(false) { }
+  virtual ~Screen() { }
 
 	virtual void Initialize() = 0;
 	virtual void Update(float dt) = 0;
-	virtual void Paint() = 0;
+	virtual void Render() = 0;
 
   virtual void HandleInput(UINT wParam, UINT lParam) { }
 

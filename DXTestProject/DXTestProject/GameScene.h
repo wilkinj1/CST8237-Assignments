@@ -1,8 +1,3 @@
-/* GameScene.h
- * Author: Justin Wilkinson
- * Purpose: An concrete class representing my Game.
- */
-
 #pragma once
 
 #include "Scene.h"
@@ -12,25 +7,22 @@ class Player;
 class GameScene: public Scene
 {
 public:
-	GameScene();
-	virtual ~GameScene();
+  GameScene();
+  ~GameScene();
 
-	/** Initialize our scene. 
-	 */
-	virtual void Initialize();
+	void Initialize();
+	void Cleanup();
 
-	/** Update our scene.
-	 *	@param dt The current elapsed time since the last frame.
-	 */
-	virtual void Update(float dt);
+	void Update(float dt);
+	void Paint();
 
-	/** Render/draw our scene.
-	 */
-	virtual void Render();
+  void OnEnter();
+  void OnExit();
 
-  virtual void OnEnter();
-  virtual void OnExit();
+  void HandleInput(UINT wParam, UINT lParam);
 
 protected:
 	Player *mPlayer;
+  float mDT;
+  int mScore;
 };

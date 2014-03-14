@@ -1,42 +1,26 @@
-/* SceneManager.h
- * Author: Justin Wilkinson
- * Purpose: 
- */
-
 #pragma once
 
 #include <vector>
+#include "Paintable.h"
 
 class Scene;
+struct ID3D11DeviceContext;
 
 class SceneManager
 {
 public:
-	/** Initialize our scene manager. 
-	 */
-	void Initialize();
+	SceneManager(void);
+	virtual ~SceneManager(void);
 
-	/** Update our scene manager.
-	 *	@param dt The current elapsed time since the last frame.
-	 */
 	void Update(float dt);
+	void Paint();
 
-	/** Render/draw the scenes in our scene manager.
-	 */
-	void Render();
+  void PushScene(Scene *scene);
+  Scene* PopScene();
 
-	/** Push our scene onto the scene stack.
-	 *  @param scene The new scene to push onto our stack.
-	 */
-	void PushScene(Scene *scene);
-
-	/** Pop the top scene off the scene stack.
-	 */
-	void PopScene();
-
+  Scene* GetActiveScene();
   void PopAllScenes();
 
-protected:
-	/** The scenes that we're going to manage. */
+private:
 	std::vector<Scene *> mScenes;
 };

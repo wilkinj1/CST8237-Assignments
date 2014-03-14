@@ -10,10 +10,10 @@ Camera::Camera()
 	SetUpVector(XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 }
 
-Camera::Camera(float fov, float aspectRatio, XMFLOAT4 lookAtTarget, XMFLOAT4 position, XMFLOAT4 up)
+Camera::Camera(float fov, float width, float height, XMFLOAT4 lookAtTarget, XMFLOAT4 position, XMFLOAT4 up)
 {
 	SetFOV(fov);
-	SetAspectRatio(aspectRatio);
+  SetViewSize(width, height);
 	SetLookAtTarget(lookAtTarget);
 	SetPosition(position);
 	SetUpVector(up);
@@ -30,6 +30,17 @@ void Camera::SetFOV(float fov)
 {
 	mFOV = fov;
 	mRecalculateProjectionMatrix = true;
+}
+
+XMFLOAT2 Camera::GetViewSize()
+{
+  return mViewSize;
+}
+
+void Camera::SetViewSize(float width, float height)
+{
+  mViewSize = XMFLOAT2(width, height);
+  SetAspectRatio(width / height);
 }
 
 float Camera::GetAspectRatio()

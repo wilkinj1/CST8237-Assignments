@@ -11,7 +11,7 @@ class Camera
 {
 public:
 	Camera();
-	Camera(float fov, float aspectRatio, XMFLOAT4 lookAtTarget, XMFLOAT4 position, XMFLOAT4 up = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+	Camera(float fov, float width, float height, XMFLOAT4 lookAtTarget, XMFLOAT4 position, XMFLOAT4 up = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 	~Camera();
 
 	float GetFOV();
@@ -19,6 +19,9 @@ public:
 
 	float GetAspectRatio();
 	void SetAspectRatio(float aspectRatio);
+
+  XMFLOAT2 GetViewSize();
+  void SetViewSize(float width, float height);
 
 	XMFLOAT4 GetLookAtTarget();
 	void SetLookAtTarget(XMFLOAT4 lookAtTarget);
@@ -38,6 +41,8 @@ protected:
 
 	float mFOV;
 	float mAspectRatio;
+  XMFLOAT2 mViewSize;
+
 	XMFLOAT4 mLookAtTarget;
 	XMFLOAT4 mPosition;
 	XMFLOAT4 mUpVector;

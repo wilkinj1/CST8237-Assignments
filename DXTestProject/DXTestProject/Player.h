@@ -1,40 +1,31 @@
-/* Player.h
- * Author: Justin Wilkinson
- * Purpose: A concrete class describing my player character.
- */
-
 #pragma once
 
-struct ID3D11Buffer;
-struct ID3D11VertexShader;
-struct ID3D11PixelShader;
-struct ID3D11InputLayout;
+#include "GameObject.h"
 
-class Player
+#ifdef OLD_DX_SDK
+#include <xnamath.h>
+#else
+#include <DirectXMath.h>
+using namespace DirectX;
+#endif
+
+class Model;
+
+class Player: public GameObject
 {
 public:
-  Player();
-	virtual ~Player();
+	Player();
+	~Player();
 
-	/** Initialize our object. 
-	 */
-	virtual void Initialize();
+	void Initialize();
+	void Update(float dt);
 
-	/** Update our object.
-	 *	@param dt The current elapsed time since the last frame.
-	 */
-	virtual void Update(float dt);
+  void Paint(const XMMATRIX &world, const XMMATRIX &viewProj, const XMFLOAT4 &cameraPos, XMFLOAT4 lightPos);
 
-	/** Render/draw our object.
-	 */
-	virtual void Render();
+protected:
+  Model *mPlayerModel;
+  Model *mSatelliteModel;
+  Model *mLightModel;
 
- protected:
-   ID3D11Buffer *mVertexBuffer;
-   ID3D11VertexShader *mVertexShader;
-   ID3D11PixelShader *mPixelShader;
-   ID3D11InputLayout *mInputLayout;
-
-   // This is a buffer that we'll use to pass our world-view-projection transformation to our shader.
-   ID3D11Buffer *mWVPMatrixBuffer;
+  void Paint(const XMMATRIX &world, const XMMATRIX &viewProj, const XMFLOAT4 &cameraPos) { }
 };

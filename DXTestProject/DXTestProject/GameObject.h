@@ -1,25 +1,51 @@
-/* GameObject.h
- * Author: Justin Wilkinson
- * Purpose: An abstract representation of an object for use by our engine.
- */
-
 #pragma once
+
+#include "Paintable.h"
+
+struct ID3D11DeviceContext;
 
 class GameObject
 {
 public:
-	virtual ~GameObject();
+	GameObject():
+    mPosition(XMFLOAT3(0.0f, 0.0f, 0.0f)),
+    mRotation(XMFLOAT3(0.0f, 0.0f, 0.0f)),
+    mScale(XMFLOAT3(1.0f, 1.0f, 1.0f))  { }
+	virtual ~GameObject() { }
 
-	/** Initialize our object. 
-	 */
 	virtual void Initialize() = 0;
-
-	/** Update our object.
-	 *	@param dt The current elapsed time since the last frame.
-	 */
 	virtual void Update(float dt) = 0;
+  virtual void Paint(const XMMATRIX &world, const XMMATRIX &viewProj, const XMFLOAT4 &cameraPos) = 0;
 
-	/** Render/draw our object.
-	 */
-	virtual void Render() = 0;
+  XMFLOAT3 GetPosition()
+  {
+    return mPosition;
+  }
+  void SetPosition(XMFLOAT3 position)
+  {
+    mPosition = position;
+  }
+
+  XMFLOAT3 GetRotation()
+  {
+    return mRotation;
+  }
+  void SetRotation(XMFLOAT3 rotation)
+  {
+	  mRotation = rotation;
+  }
+
+  XMFLOAT3 GetScale()
+  {
+    return mScale;
+  }
+  void SetScale(XMFLOAT3 scale)
+  {
+	  mScale = scale;
+  }
+
+protected:
+	XMFLOAT3 mPosition;
+	XMFLOAT3 mRotation;
+	XMFLOAT3 mScale;
 };

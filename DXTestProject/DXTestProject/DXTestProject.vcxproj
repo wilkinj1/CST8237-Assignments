@@ -19,13 +19,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v100</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -84,11 +84,16 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DXTestProject.h" />
+    <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GraphicsManager.h" />
+    <ClInclude Include="MatrixStack.h" />
     <ClInclude Include="MenuScene.h" />
-    <ClInclude Include="NewGameEngine.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelBuilder.h" />
+    <ClInclude Include="Paintable.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
@@ -99,10 +104,14 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DXTestProject.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GraphicsManager.cpp" />
+    <ClCompile Include="MatrixStack.cpp" />
     <ClCompile Include="MenuScene.cpp" />
-    <ClCompile Include="NewGameEngine.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelBuilder.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="stdafx.cpp">

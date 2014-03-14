@@ -2,27 +2,11 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-void SceneManager::Initialize()
-{
+SceneManager::SceneManager(void) { }
 
-}
-
-void SceneManager::Update(float dt)
+SceneManager::~SceneManager(void) 
 {
-  if(!mScenes.empty())
-  {
-    Scene *currentScene = mScenes.back();
-    currentScene->Update(dt);
-  }
-}
-
-void SceneManager::Render()
-{
-  if(!mScenes.empty())
-  {
-    Scene *currentScene = mScenes.back();
-    currentScene->Render();
-  }
+  PopAllScenes();
 }
 
 void SceneManager::PushScene(Scene *scene)
@@ -32,30 +16,60 @@ void SceneManager::PushScene(Scene *scene)
     mScenes.back()->OnExit();
   }
 
-	mScenes.push_back(scene);
+  mScenes.push_back(scene);
   scene->OnEnter();
 }
 
-void SceneManager::PopScene()
+Scene* SceneManager::PopScene()
 {
-  // Do a check to see if we're empty.
+  Scene *sceneToPop = NULL;
+
   if(!mScenes.empty())
   {
-    mScenes.back()->OnExit();
+    sceneToPop = mScenes.back();
+    sceneToPop->OnExit();
     mScenes.pop_back();
 
-    // If we're still not empty after popping the last element off..
-    if(!mScenes.empty())
+    if (!mScenes.empty())
     {
       mScenes.back()->OnEnter();
     }
   }
+
+  return sceneToPop;
 }
 
-  void SceneManager::PopAllScenes()
+void SceneManager::Update(float dt)
+{
+  if (!mScenes.empty())
+	{
+    mScenes.back()->Update(dt);
+	}
+}
+	
+void SceneManager::Paint()
+{
+  if (!mScenes.empty())
+	{
+    mScenes.back()->Paint();
+	}
+}
+
+Scene* SceneManager::GetActiveScene()
+{
+  Scene *sceneToReturn = NULL;
+  if (!mScenes.empty())
   {
-    while(!mScenes.empty())
-    {
-      PopScene();
-    }
+    sceneToReturn = mScenes.back();
   }
+
+  return sceneToReturn;
+}
+
+void SceneManager::PopAllScenes()
+{
+  while (!mScenes.empty())
+  {
+    PopScene();
+  }
+}

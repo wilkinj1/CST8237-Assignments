@@ -3,13 +3,16 @@
 
 #include "stdafx.h"
 #include "DXTestProject.h"
-#include "NewGameEngine.h"
-#include <d3d11.h>
-#include <assert.h>
-#include "SceneManager.h"
+#include "GameEngine.h"
 #include "GameScene.h"
+#include "GraphicsManager.h"
+#include "SceneManager.h"
+#include <d3d11.h>
+#include "Camera.h"
 #include "MenuScene.h"
 #include "GameTimer.h"
+
+GameScene *igs = NULL;
 
 #define MAX_LOADSTRING 100
 
@@ -23,10 +26,6 @@ ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int, HWND&);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK	NewGameDialog(HWND, UINT, WPARAM, LPARAM);
-
-GameScene *game = NULL;
-MenuScene *menu = NULL;
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
                        _In_opt_ HINSTANCE hPrevInstance,
@@ -53,30 +52,21 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     return FALSE;
   }
 
-  // intialize stuff
-  NewGameEngine *engine = NewGameEngine::GetInstance();
-
-  // If our engine didn't intialize properly, we're done.
-  assert(engine->Initialize(hWnd, hInstance));
-
-  game = new GameScene();
-  game->Initialize();
-
-  menu = new MenuScene();
-  menu->Initialize();
-
-  engine->GetSceneManager()->PushScene(game);
-
-  GameTimer timer;
-  timer.Start();
+  GameEngine *engine = GameEngine::getInstance();
+  engine->Initialize(hWnd, hInstance);
 
   hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DXTESTPROJECT));
+
+  GameTimer gt;
+  gt.Start();
+
+  GameScene *gs = new GameScene();
+  gs->Initialize();
+  engine->getSceneManager()->PushScene(gs);
 
   // Main message loop:
   while( msg.message != WM_QUIT )
   {
-	  /* We use PeekMessage instead of GetMessage because Peek isn't blocking, so that we can
-	     perform any operation we want without having to wait for a Windows message to be received. */
     if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
       if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -87,27 +77,15 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     }
     else
     {
-      if(!timer.IsStopped() && !timer.IsPaused())
-      {
-        // Tick our timer so that we can get the accurate time since the last call.
-        timer.Tick();
-
-        // do stuff
-        engine->Update(timer.GetDeltaTime());
-        engine->Render();
-      }
+      gt.Tick();
+      float dt = gt.GetDeltaTime();
+      engine->Update(dt);
+      engine->Paint();
     }
   };
 
-  // Cleanup.
-    engine->GetSceneManager()->PopAllScenes();
-    delete game;
-    game = NULL;
-
-    delete menu;
-    menu = NULL;
-
-    NewGameEngine::DestroyInstance();
+  engine->getSceneManager()->PopAllScenes();
+  GameEngine::shutdown();
 
   return (int) msg.wParam;
 }
@@ -202,19 +180,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       return DefWindowProc(hWnd, message, wParam, lParam);
     }
     break;
-  case WM_SIZE:
-    {
-      RECT clientRect;
-      GetClientRect(hWnd, &clientRect);
-
-      float screenWidth = clientRect.right - clientRect.left;
-      float screenHeight = clientRect.top - clientRect.bottom;
-
-      // Update your camera's aspect ratio.
-      float aspectRatio = screenWidth / screenHeight;
-    }
+  case WM_KEYDOWN:
+    GameEngine::getInstance()->getSceneManager()->GetActiveScene()->HandleInput(wParam, lParam);
     break;
-
   case WM_PAINT:
     hdc = BeginPaint(hWnd, &ps);
     // TODO: Add any drawing code here...
@@ -248,4 +216,3 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   }
   return (INT_PTR)FALSE;
 }
-
