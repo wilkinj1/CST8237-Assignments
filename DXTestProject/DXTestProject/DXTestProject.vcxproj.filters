@@ -75,6 +75,15 @@
     <ClInclude Include="MatrixStack.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Lights.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsIncludes.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelUtils.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -114,6 +123,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MatrixStack.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelUtils.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>

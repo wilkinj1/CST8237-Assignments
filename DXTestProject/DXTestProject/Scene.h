@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "Paintable.h"
+#include "GraphicsIncludes.h"
 
 class GameObject;
 class Camera;

@@ -33,6 +33,8 @@ public:
 	void SetUpVector(XMFLOAT4 upVector);
 
 	void Update(float dt);
+  XMMATRIX GetViewMatrix();
+  XMMATRIX GetProjectionMatrix();
 	XMMATRIX GetViewProjectionMatrix();
 
 protected:

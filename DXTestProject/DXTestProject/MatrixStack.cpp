@@ -15,6 +15,8 @@ void MatrixStack::PushMatrix(const XMMATRIX &matrix)
 const XMMATRIX& MatrixStack::PopMatrix()
 {
   XMFLOAT4X4 lastMatrixValue = mMatrixValueStack.top();
+  mMatrixValueStack.pop();
+
   XMMATRIX lastMatrix = XMLoadFloat4x4(&lastMatrixValue);
   XMVECTOR determinant = XMMatrixDeterminant(lastMatrix);
 
@@ -29,4 +31,13 @@ const XMMATRIX& MatrixStack::PopMatrix()
 const XMMATRIX& MatrixStack::GetCurrentMatrix()
 {
   return XMLoadFloat4x4(&mCurrentMatrixValue);
+}
+
+void MatrixStack::Clear()
+{
+  XMStoreFloat4x4(&mCurrentMatrixValue, XMMatrixIdentity());
+  while (!mMatrixValueStack.empty())
+  {
+    mMatrixValueStack.pop();
+  }
 }

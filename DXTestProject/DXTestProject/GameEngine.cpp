@@ -5,7 +5,7 @@
 
 #include "SceneManager.h"
 #include "GraphicsManager.h"
-#include "Paintable.h"
+#include "GraphicsIncludes.h"
 
 GameEngine* GameEngine::mEngineInstance = NULL;
 

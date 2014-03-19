@@ -1,5 +1,4 @@
 #pragma once
-//#include <d3d11.h>
 
 class Model;
 struct D3D11_INPUT_ELEMENT_DESC;

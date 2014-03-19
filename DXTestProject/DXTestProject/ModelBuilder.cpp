@@ -34,6 +34,24 @@ Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
 	GraphicsManager *gm = GameEngine::getInstance()->getGraphicsManager();
   ID3D11Device *device = gm->GetGraphicsDevice();
 
+
+  D3DX11_IMAGE_LOAD_INFO imageInfo;
+  HRESULT result = D3DX11CreateShaderResourceViewFromFile(device, L"./IC504917.png", &imageInfo, NULL, &newModel->mTextureView, NULL);
+
+  assert(SUCCEEDED(result));
+
+  D3D11_SAMPLER_DESC samplerDesc;
+  ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
+  samplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+  samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+  samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+  samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+  samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+  samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+  result = device->CreateSamplerState(&samplerDesc, &newModel->mTextureSamplerState);
+  assert(SUCCEEDED(result));
+
 	D3D11_BUFFER_DESC matrixBufferDesc;
   ZeroMemory(&matrixBufferDesc, sizeof(matrixBufferDesc));
   matrixBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -41,7 +59,7 @@ Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
   matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
 	// Create the constant buffer for our world-view-projection matrix;
-  HRESULT result = device->CreateBuffer(&matrixBufferDesc, NULL, &newModel->mMatrixBuffer);
+  result = device->CreateBuffer(&matrixBufferDesc, NULL, &newModel->mMatrixBuffer);
 
   D3D11_BUFFER_DESC lightBufferDesc;
   ZeroMemory(&lightBufferDesc, sizeof(lightBufferDesc));
@@ -163,5 +181,17 @@ void ModelBuilder::destroy(Model *model)
   {
     model->mLightBuffer->Release();
     model->mLightBuffer = NULL;
+  }
+
+  if (model->mTextureView)
+  {
+    model->mTextureView->Release();
+    model->mTextureView = NULL;
+  }
+
+  if (model->mTextureSamplerState)
+  {
+    model->mTextureSamplerState->Release();
+    model->mTextureSamplerState = NULL;
   }
 }

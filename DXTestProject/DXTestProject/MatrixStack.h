@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Paintable.h"
+#include "GraphicsIncludes.h"
 #include <stack>
 
 class MatrixStack
@@ -8,6 +8,7 @@ class MatrixStack
 public:
   void PushMatrix(const XMMATRIX &matrix);
   const XMMATRIX& PopMatrix();
+  void Clear();
 
   const XMMATRIX& GetCurrentMatrix();
 

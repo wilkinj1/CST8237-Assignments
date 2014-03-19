@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Paintable.h"
+#include "GraphicsIncludes.h"
 
 struct ID3D11DeviceContext;
 

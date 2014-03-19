@@ -26,7 +26,7 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
-	mSceneCamera = new Camera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, -5.0f, 1.0f));
+	mSceneCamera = new Camera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, -50.0f, 1.0f));
 	mPlayer = new Player();
 	mPlayer->Initialize();
 	mIsInitialized = true;
@@ -40,8 +40,8 @@ void GameScene::Update(float dt)
 
 void GameScene::Paint()
 {
-  static XMFLOAT4 lightPos(0.0f, 5.0f, 0.0f, 0.0f);
-  mPlayer->Paint(XMMatrixIdentity(), mSceneCamera->GetViewProjectionMatrix(), mSceneCamera->GetPosition(), lightPos);
+  static XMFLOAT4 lightPos(0.0f, 15.0f, 0.0f, 0.0f);
+  mPlayer->Paint(XMMatrixIdentity(), mSceneCamera->GetViewMatrix(), mSceneCamera->GetProjectionMatrix(), mSceneCamera->GetPosition(), lightPos);
 }
 
 void GameScene::OnEnter() {   }
@@ -56,42 +56,42 @@ void GameScene::HandleInput(UINT wParam, UINT lParam)
   case('A'):
     {
       XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.x -= 0.1f;
+      position.x -= 1.0f;
       mSceneCamera->SetPosition(position);
     }
     break;
   case('W'):
     {
       XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.z += 0.1f;
+      position.z += 1.0f;
       mSceneCamera->SetPosition(position);
     }
     break;
   case('S'):
     {
       XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.z -= 0.1f;
+      position.z -= 1.0f;
       mSceneCamera->SetPosition(position);
     }
     break;
   case('D'):
     {
       XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.x += 0.1f;
+      position.x += 1.0f;
       mSceneCamera->SetPosition(position);
     }
     break;
   case('Q'):
     {
       XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.y += 0.1f;
+      position.y += 1.0f;
       mSceneCamera->SetPosition(position);
     }
     break;
   case('E'):
     {
       XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.y -= 0.1f;
+      position.y -= 1.0f;
       mSceneCamera->SetPosition(position);
     }
     break;

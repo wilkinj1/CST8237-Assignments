@@ -20,7 +20,7 @@ public:
 	void Initialize();
 	void Update(float dt);
 
-  void Paint(const XMMATRIX &world, const XMMATRIX &viewProj, const XMFLOAT4 &cameraPos, XMFLOAT4 lightPos);
+  void Paint(const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &proj, const XMFLOAT4 &cameraPos, XMFLOAT4 lightPos);
 
 protected:
   Model *mPlayerModel;

@@ -12,17 +12,11 @@
 
 #include <d3dcommon.h>
 
-#ifdef __XNAMATH_H__
-#include <xnamath.h>
-#else
-#include <DirectXMath.h>
-using namespace DirectX;
-#endif
-
 struct MatrixBuffer
 {
   XMMATRIX world;
-  XMMATRIX viewProj;
+  XMMATRIX view;
+  XMMATRIX proj;
   XMMATRIX wvp;
   XMFLOAT4 cameraPos;
 };
@@ -50,15 +44,16 @@ void Model::Update(float dt)
 {
 }
 
-void Model::Paint(const XMMATRIX &world, const XMMATRIX &viewProj, const XMFLOAT4 &cameraPos, XMFLOAT4 lightPos)
+void Model::Paint(const XMMATRIX &world, const XMMATRIX& view, const XMMATRIX &proj, const XMFLOAT4 &cameraPos, XMFLOAT4 lightPos)
 {
   unsigned int stride = mSizeOfVertexDesc;
 	unsigned int offset = 0;
 
   MatrixBuffer buffer;
   buffer.world = XMMatrixTranspose(world);
-  buffer.viewProj = XMMatrixTranspose(viewProj);
-  buffer.wvp = XMMatrixTranspose(world * viewProj);
+  buffer.view = XMMatrixTranspose(view);
+  buffer.proj = XMMatrixTranspose(proj);
+  buffer.wvp = XMMatrixTranspose(world * view * proj);
   buffer.cameraPos = cameraPos;
 
   ID3D11DeviceContext *dc = GameEngine::getInstance()->getGraphicsManager()->GetGraphicsDeviceContext();
@@ -69,6 +64,8 @@ void Model::Paint(const XMMATRIX &world, const XMMATRIX &viewProj, const XMFLOAT
 
 	dc->VSSetShader(mVertexShader, 0, 0);
 	dc->PSSetShader(mFragmentShader, 0, 0);
+  dc->PSSetShaderResources(0, 1, &mTextureView);
+  dc->PSSetSamplers(0, 1, &mTextureSamplerState);
 
   dc->UpdateSubresource(mMatrixBuffer, 0, 0, &buffer, 0, 0);
   dc->VSSetConstantBuffers(0, 1, &mMatrixBuffer);

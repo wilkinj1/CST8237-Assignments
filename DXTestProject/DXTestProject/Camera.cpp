@@ -109,6 +109,16 @@ void Camera::Update(float dt)
 	}
 }
 
+XMMATRIX Camera::GetViewMatrix()
+{
+  return XMLoadFloat4x4(&mViewMatrix);
+}
+
+XMMATRIX Camera::GetProjectionMatrix()
+{
+  return XMLoadFloat4x4(&mProjectionMatrix);
+}
+
 XMMATRIX Camera::GetViewProjectionMatrix()
 {
 	return XMLoadFloat4x4(&mViewProjectionMatrix);
