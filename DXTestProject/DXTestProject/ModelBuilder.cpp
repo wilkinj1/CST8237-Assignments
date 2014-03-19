@@ -52,7 +52,7 @@ Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
   result = device->CreateSamplerState(&samplerDesc, &newModel->mTextureSamplerState);
   assert(SUCCEEDED(result));
 
-	D3D11_BUFFER_DESC matrixBufferDesc;
+  D3D11_BUFFER_DESC matrixBufferDesc;
   ZeroMemory(&matrixBufferDesc, sizeof(matrixBufferDesc));
   matrixBufferDesc.Usage = D3D11_USAGE_DEFAULT;
   matrixBufferDesc.ByteWidth = sizeof(XMMATRIX)* 3;

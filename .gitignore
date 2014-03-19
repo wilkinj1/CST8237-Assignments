@@ -15,6 +15,10 @@ local.properties
 .classpath
 .settings/
 .loadpath
+**/Debug/
+**/Release/
+**/ipch/
+*.sdf
 
 # External tool builders
 .externalToolBuilders/
