@@ -192,13 +192,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
   case WM_SIZE:
   {
-    RECT windowRect;
-    GetClientRect(hWnd, &windowRect);
+	  if(GameEngine::GetInstance()->IsInitialized())
+	  {
+      RECT windowRect;
+      GetClientRect(hWnd, &windowRect);
 
-    size_t windowWidth = windowRect.right - windowRect.left;
-    size_t windowHeight = windowRect.bottom - windowRect.top;
+      size_t windowWidth = windowRect.right - windowRect.left;
+      size_t windowHeight = windowRect.bottom - windowRect.top;
 
-    GameEngine::GetInstance()->GetGraphicsManager()->SetViewport(windowHeight, windowWidth);
+      GameEngine::GetInstance()->GetGraphicsManager()->SetViewport(windowHeight, windowWidth);
+    }
   }
     break;
   case WM_DESTROY:

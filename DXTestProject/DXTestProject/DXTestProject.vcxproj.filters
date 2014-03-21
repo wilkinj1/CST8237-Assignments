@@ -48,9 +48,6 @@
     <ClInclude Include="ModelBuilder.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Paintable.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="GameTimer.h">
       <Filter>Engine</Filter>
     </ClInclude>
