@@ -81,3 +81,8 @@ Model* ModelUtils::CreateCubeModelPCNT()
 
   return BasicShaderModelBuilder::Create(modelDescription);
 }
+
+void ModelUtils::DestroyModel(Model *model)
+{
+  BasicShaderModelBuilder::Destroy(model);
+}

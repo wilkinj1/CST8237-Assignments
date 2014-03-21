@@ -41,7 +41,7 @@ public:
    */
   void Clear();
 
-  /* Clear the matrix stack, and return it to an Identity state.
+  /* Get the matrix that describes the current conglomeration of the stack.
    * @return A matrix that represents the current value of the stack.
    */
   XMMATRIX GetCurrentMatrix();

@@ -148,7 +148,7 @@ void Camera::CalculateProjectionMatrix()
 {
 	if(mRecalculateProjectionMatrix)
 	{
-		XMMATRIX projectionMatrix = XMMatrixPerspectiveFovLH(mFOV, mAspectRatio, 0.1f, 100.0f);
+		XMMATRIX projectionMatrix = XMMatrixPerspectiveFovLH(mFOV, mAspectRatio, 0.1f, 1000.0f);
 		XMStoreFloat4x4(&mProjectionMatrix, projectionMatrix);
 		mRecalculateProjectionMatrix = false;
 	}
