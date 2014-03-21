@@ -1,3 +1,9 @@
+/* Model
+ * Author: Justin Wilkinson
+ * Purpose: A simple representation of a 3D model. I left it as vague as possible so that anyone who wants to
+ * can create whatever kinds of models they want using the same interface.
+ */
+
 #pragma once
 #include "GraphicsIncludes.h"
 #include "GameObject.h"

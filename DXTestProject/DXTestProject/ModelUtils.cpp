@@ -6,7 +6,7 @@
 
 Model* ModelUtils::CreateCubeModelPCNT()
 {
-  VertexPositionColorNormalTextureUVDescription verticesCombo[] =
+  VertexPositionColorNormalTextureUVDescription vertices[] =
   {
     // front face
     { XMFLOAT3(0.5f, -0.5f, -0.5f), XMFLOAT3(1.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f), XMFLOAT2(1.0f, 1.0f) },
@@ -72,10 +72,10 @@ Model* ModelUtils::CreateCubeModelPCNT()
   };
 
   MODEL_DESC modelDescription;
-  modelDescription.modelData = verticesCombo;
-  modelDescription.sizeOfData = sizeof(verticesCombo);
+  modelDescription.modelData = vertices;
+  modelDescription.sizeOfData = sizeof(vertices);
   modelDescription.sizeOfVertexDesc = sizeof(VertexPositionColorNormalTextureUVDescription);
-  modelDescription.vertexCount = ARRAYSIZE(verticesCombo);
+  modelDescription.vertexCount = ARRAYSIZE(vertices);
   modelDescription.elementDescs = elementDesciptions;
   modelDescription.elementCount = ARRAYSIZE(elementDesciptions);
 
