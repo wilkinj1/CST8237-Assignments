@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Scene.h"
+#include "Lights.h"
 
 class Player;
+class Model;
 
 class GameScene: public Scene
 {
@@ -25,4 +27,7 @@ protected:
 	Player *mPlayer;
   float mDT;
   int mScore;
+
+  Model *mLightModel;
+  PointLight mLight;
 };

@@ -18,20 +18,14 @@
 
 #include <d3dcommon.h>
 #include <D3DX11async.h>
-
-#ifdef __XNAMATH_H__
-#include <xnamath.h>
-#else
-#include <DirectXMath.h>
-using namespace DirectX;
-#endif
+#include "GraphicsIncludes.h"
 
 ModelBuilder::ModelBuilder() { }
 
-Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
+Model* ModelBuilder::Create(const MODEL_DESC &modelDesc, const SHADER_DESC &vertexDesc, const SHADER_DESC &pixelDesc)
 {
 	Model *newModel = new Model();
-	GraphicsManager *gm = GameEngine::getInstance()->getGraphicsManager();
+	GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
   ID3D11Device *device = gm->GetGraphicsDevice();
 
 
@@ -55,7 +49,7 @@ Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
   D3D11_BUFFER_DESC matrixBufferDesc;
   ZeroMemory(&matrixBufferDesc, sizeof(matrixBufferDesc));
   matrixBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-  matrixBufferDesc.ByteWidth = sizeof(XMMATRIX)* 3;
+  matrixBufferDesc.ByteWidth = sizeof(MatrixBuffer);
   matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
 	// Create the constant buffer for our world-view-projection matrix;
@@ -82,7 +76,7 @@ Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
 	// Fill in the subresource data.
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory( &InitData, sizeof( InitData ) );
-	InitData.pSysMem = modelDesc.pData;
+	InitData.pSysMem = modelDesc.modelData;
 
 	// Create the vertex buffer.
 	result = device->CreateBuffer( &bufferDesc, &InitData, &newModel->mVertexBuffer );
@@ -93,7 +87,7 @@ Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
 	ID3DBlob *errorMessage = nullptr;
 
 	//result = GraphicsManager::CompileShaderFromFile(L"./basicShader.fx", "BasicVertexShader", "vs_4_0", &vertexShaderCode, &errorMessage);
-  result = D3DX11CompileFromFile(L"./basicShader.fx", NULL, NULL, "BasicVertexShader", "vs_4_0", 0, 0, NULL, &vertexShaderCode, &errorMessage, NULL);
+  result = D3DX11CompileFromFile(vertexDesc.filepath, NULL, NULL, vertexDesc.entryPoint, vertexDesc.profile, 0, 0, NULL, &vertexShaderCode, &errorMessage, NULL);
 
 	if(errorMessage != NULL)
 	{
@@ -104,7 +98,7 @@ Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
 	assert(SUCCEEDED(result));
 
 	//result = GraphicsManager::CompileShaderFromFile(L"./basicShader.fx", "BasicFragmentShader", "ps_4_0", &fragmentShaderCode, &errorMessage);
-  result = D3DX11CompileFromFile(L"./basicShader.fx", NULL, NULL, "BasicFragmentShader", "ps_4_0", 0, 0, NULL, &fragmentShaderCode, &errorMessage, NULL);
+  result = D3DX11CompileFromFile(pixelDesc.filepath, NULL, NULL, pixelDesc.entryPoint, pixelDesc.profile, 0, 0, NULL, &fragmentShaderCode, &errorMessage, NULL);
 	if(errorMessage != NULL)
 	{
 		std::string output = (char *)errorMessage->GetBufferPointer();
@@ -145,7 +139,7 @@ Model* ModelBuilder::create(const MODEL_DESC &modelDesc)
 	return newModel;
 }
 
-void ModelBuilder::destroy(Model *model)
+void ModelBuilder::Destroy(Model *model)
 {
 	if(model->mVertexBuffer)
 	{

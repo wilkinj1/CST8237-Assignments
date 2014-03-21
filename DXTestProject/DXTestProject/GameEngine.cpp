@@ -29,7 +29,7 @@ GameEngine::~GameEngine(void)
 	}
 }
 
-GameEngine* GameEngine::getInstance()
+GameEngine* GameEngine::GetInstance()
 {
 	if(mEngineInstance == NULL)
 	{
@@ -39,7 +39,7 @@ GameEngine* GameEngine::getInstance()
 	return mEngineInstance;
 }
 
-void GameEngine::shutdown()
+void GameEngine::Shutdown()
 {
 	if(mEngineInstance != NULL)
 	{
@@ -49,14 +49,14 @@ void GameEngine::shutdown()
 
 bool GameEngine::Initialize(HWND hWnd, HINSTANCE hInstance)
 {
-	if(!isInitialized())
+	if(!IsInitialized())
 	{
 		mIsInitialized = mGraphicsManager->Initialize(hWnd, hInstance);
 	}
-	return isInitialized();
+	return IsInitialized();
 }
 
-bool GameEngine::isInitialized()
+bool GameEngine::IsInitialized()
 {
 	return mIsInitialized;
 }
@@ -79,12 +79,12 @@ void GameEngine::Paint()
 	mGraphicsManager->mD3DSwapChain->Present(0, 0);
 }
 
-GraphicsManager* GameEngine::getGraphicsManager()
+GraphicsManager* GameEngine::GetGraphicsManager()
 {
 	return mGraphicsManager;
 }
 
-SceneManager* GameEngine::getSceneManager()
+SceneManager* GameEngine::GetSceneManager()
 {
 	return mSceneManager;
 }

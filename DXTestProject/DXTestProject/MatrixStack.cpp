@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "MatrixStack.h"
 
+MatrixStack::MatrixStack()
+{
+  Clear();
+}
+
 void MatrixStack::PushMatrix(const XMMATRIX &matrix)
 {
   XMFLOAT4X4 matrixValue;
@@ -8,7 +13,7 @@ void MatrixStack::PushMatrix(const XMMATRIX &matrix)
   mMatrixValueStack.push(matrixValue);
 
   XMMATRIX currentMatrix = XMLoadFloat4x4(&mCurrentMatrixValue);
-  currentMatrix *= matrix;
+  currentMatrix = matrix * currentMatrix;
   XMStoreFloat4x4(&mCurrentMatrixValue, currentMatrix);
 }
 
@@ -22,13 +27,13 @@ const XMMATRIX& MatrixStack::PopMatrix()
 
   XMMATRIX inverseMatrix = XMMatrixInverse(&determinant, lastMatrix);
   XMMATRIX currentMatrix = XMLoadFloat4x4(&mCurrentMatrixValue);
-  currentMatrix *= inverseMatrix;
+  currentMatrix = inverseMatrix * currentMatrix;
   XMStoreFloat4x4(&mCurrentMatrixValue, currentMatrix);
 
   return lastMatrix;
 }
 
-const XMMATRIX& MatrixStack::GetCurrentMatrix()
+XMMATRIX MatrixStack::GetCurrentMatrix()
 {
   return XMLoadFloat4x4(&mCurrentMatrixValue);
 }

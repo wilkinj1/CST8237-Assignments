@@ -52,7 +52,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     return FALSE;
   }
 
-  GameEngine *engine = GameEngine::getInstance();
+  GameEngine *engine = GameEngine::GetInstance();
   engine->Initialize(hWnd, hInstance);
 
   hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DXTESTPROJECT));
@@ -62,7 +62,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
   GameScene *gs = new GameScene();
   gs->Initialize();
-  engine->getSceneManager()->PushScene(gs);
+  engine->GetSceneManager()->PushScene(gs);
 
   // Main message loop:
   while( msg.message != WM_QUIT )
@@ -84,8 +84,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
     }
   };
 
-  engine->getSceneManager()->PopAllScenes();
-  GameEngine::shutdown();
+  engine->GetSceneManager()->PopAllScenes();
+  GameEngine::Shutdown();
 
   return (int) msg.wParam;
 }
@@ -165,7 +165,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   switch (message)
   {
   case WM_COMMAND:
-    wmId    = LOWORD(wParam);
+    wmId = LOWORD(wParam);
     wmEvent = HIWORD(wParam);
     // Parse the menu selections:
     switch (wmId)
@@ -181,12 +181,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     break;
   case WM_KEYDOWN:
-    GameEngine::getInstance()->getSceneManager()->GetActiveScene()->HandleInput(wParam, lParam);
+    GameEngine::GetInstance()->GetSceneManager()->GetActiveScene()->HandleInput(wParam, lParam);
     break;
+
   case WM_PAINT:
     hdc = BeginPaint(hWnd, &ps);
     // TODO: Add any drawing code here...
     EndPaint(hWnd, &ps);
+    break;
+
+  case WM_SIZE:
+  {
+    RECT windowRect;
+    GetClientRect(hWnd, &windowRect);
+
+    size_t windowWidth = windowRect.right - windowRect.left;
+    size_t windowHeight = windowRect.bottom - windowRect.top;
+
+    GameEngine::GetInstance()->GetGraphicsManager()->SetViewport(windowHeight, windowWidth);
+  }
     break;
   case WM_DESTROY:
     PostQuitMessage(0);

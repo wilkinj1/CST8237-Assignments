@@ -9,13 +9,13 @@ class GameEngine
 public:
 	virtual ~GameEngine(void);
 
-	static GameEngine* getInstance();
-	static void shutdown();
+	static GameEngine* GetInstance();
+	static void Shutdown();
 
-	SceneManager* getSceneManager();
-	GraphicsManager* getGraphicsManager();
+	SceneManager* GetSceneManager();
+	GraphicsManager* GetGraphicsManager();
 
-	bool isInitialized();
+	bool IsInitialized();
 	bool Initialize(HWND hWnd, HINSTANCE hInstance);
 
 	void Update(float dt);

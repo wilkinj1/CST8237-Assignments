@@ -2,14 +2,8 @@
 
 #include "GameObject.h"
 
-#ifdef OLD_DX_SDK
-#include <xnamath.h>
-#else
-#include <DirectXMath.h>
-using namespace DirectX;
-#endif
-
 class Model;
+class Camera;
 
 class Player: public GameObject
 {
@@ -20,7 +14,7 @@ public:
 	void Initialize();
 	void Update(float dt);
 
-  void Paint(const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &proj, const XMFLOAT4 &cameraPos, XMFLOAT4 lightPos);
+  void Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos);
 
 protected:
   Model *mPlayerModel;

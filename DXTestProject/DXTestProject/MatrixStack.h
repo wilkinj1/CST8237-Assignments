@@ -6,11 +6,13 @@
 class MatrixStack
 {
 public:
+  MatrixStack();
+
   void PushMatrix(const XMMATRIX &matrix);
   const XMMATRIX& PopMatrix();
   void Clear();
 
-  const XMMATRIX& GetCurrentMatrix();
+  XMMATRIX GetCurrentMatrix();
 
 protected:
   XMFLOAT4X4 mCurrentMatrixValue;

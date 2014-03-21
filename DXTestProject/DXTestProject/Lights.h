@@ -4,10 +4,10 @@
 
 struct Light
 {
-  XMFLOAT4 ambientColor;
-  XMFLOAT4 diffuseColor;
-  XMFLOAT4 specularColor;
-  XMFLOAT specularity;
+  XMFLOAT3 ambientColor;
+  XMFLOAT3 diffuseColor;
+  XMFLOAT3 specularColor;
+  float specularity;
 
   XMFLOAT3 position;
   XMFLOAT3 attenuation;
@@ -15,14 +15,14 @@ struct Light
 
 struct PointLight : public Light
 {
-  XMFLOAT intensity;
+  float intensity;
 };
 
 struct SpotLight : public Light
 {
   XMFLOAT3 direction;
-  XMFLOAT coneRadius;
-  XMFLOAT cutoff;
+  float coneRadius;
+  float cutoff;
 };
 
 struct DirectionalLight : public Light

@@ -11,6 +11,16 @@ struct ID3D11SamplerState;
 
 struct ID3D11VertexShader;
 struct ID3D11PixelShader;
+class Camera;
+
+struct MatrixBuffer
+{
+  XMMATRIX world;
+  XMMATRIX view;
+  XMMATRIX proj;
+  XMMATRIX wvp;
+  XMFLOAT4 cameraPos;
+};
 
 class Model: public GameObject
 {
@@ -19,7 +29,7 @@ public:
 
 	void Initialize();
 	void Update(float dt);
-  void Paint(const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &proj, const XMFLOAT4 &cameraPos, XMFLOAT4 lightPos);
+  void Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos);
 
 protected:
   friend class ModelBuilder;

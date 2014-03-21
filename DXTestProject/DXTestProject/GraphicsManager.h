@@ -3,8 +3,6 @@
 #include <string>
 #include <D3Dcommon.h>
 
-//#define NO_DEPTH
-
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
@@ -22,7 +20,7 @@ class GraphicsManager
 public:
 	virtual ~GraphicsManager(void);
 
-	void CreateViewport(float height, float width);
+  void SetViewport(float height, float width);
 
 	ID3D11Device *GetGraphicsDevice();
 	ID3D11DeviceContext *GetGraphicsDeviceContext();

@@ -13,6 +13,8 @@ cbuffer MatrixBuffer
 cbuffer LightBuffer
 {
   float3 lightPosition;
+  float3 ambientColor;
+  float3 diffuseColor;
 }
 
 struct VertexShaderInput
@@ -42,7 +44,6 @@ FragmentShaderInput BasicVertexShader( VertexShaderInput input )
 {
 	FragmentShaderInput output;
 	
-	float4 lightWorldPos = float4( lightPosition, 0.0f );
 	float4 worldPosition = mul(input.position, world);
 	
 	output.position = mul(worldPosition, view);
@@ -52,7 +53,7 @@ FragmentShaderInput BasicVertexShader( VertexShaderInput input )
 	
 	output.normal = (mul(input.normal, (float3x3)world));
 	
-	output.lightVector = (float3)(lightWorldPos - worldPosition);
+	output.lightVector = lightPosition - (float3)worldPosition;
 	output.viewVector = normalize(cameraPos - (float3)worldPosition);
 	
 	return output;

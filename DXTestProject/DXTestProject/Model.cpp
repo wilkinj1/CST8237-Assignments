@@ -9,17 +9,9 @@
 
 #include "GameEngine.h"
 #include "GraphicsManager.h"
+#include "Camera.h"
 
 #include <d3dcommon.h>
-
-struct MatrixBuffer
-{
-  XMMATRIX world;
-  XMMATRIX view;
-  XMMATRIX proj;
-  XMMATRIX wvp;
-  XMFLOAT4 cameraPos;
-};
 
 Model::Model(): 
 GameObject(),
@@ -44,19 +36,22 @@ void Model::Update(float dt)
 {
 }
 
-void Model::Paint(const XMMATRIX &world, const XMMATRIX& view, const XMMATRIX &proj, const XMFLOAT4 &cameraPos, XMFLOAT4 lightPos)
+void Model::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
 {
   unsigned int stride = mSizeOfVertexDesc;
 	unsigned int offset = 0;
+
+  XMMATRIX view = camera->GetViewMatrix();
+  XMMATRIX proj = camera->GetProjectionMatrix();
 
   MatrixBuffer buffer;
   buffer.world = XMMatrixTranspose(world);
   buffer.view = XMMatrixTranspose(view);
   buffer.proj = XMMatrixTranspose(proj);
   buffer.wvp = XMMatrixTranspose(world * view * proj);
-  buffer.cameraPos = cameraPos;
+  buffer.cameraPos = camera->GetPosition();
 
-  ID3D11DeviceContext *dc = GameEngine::getInstance()->getGraphicsManager()->GetGraphicsDeviceContext();
+  ID3D11DeviceContext *dc = GameEngine::GetInstance()->GetGraphicsManager()->GetGraphicsDeviceContext();
 
 	dc->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 	dc->IASetInputLayout(mInputLayout);

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "ModelBuilder.h"
 #include "GraphicsIncludes.h"
+
+class Model;
 
 // Define the data-type that
 // describes a vertex.
@@ -23,5 +24,5 @@ struct VertexPositionColorNormalTextureUVDescription
 class ModelUtils
 {
 public:
-  static MODEL_DESC CreateCubeModelPCNDescription();
+  static Model* CreateCubeModelPCNT();
 };

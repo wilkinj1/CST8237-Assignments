@@ -152,7 +152,6 @@ bool GraphicsManager::Initialize(HWND hWnd, HINSTANCE hInstance)
 					backBufferTexture->Release();
 				}
 
-#ifndef NO_DEPTH
         D3D11_TEXTURE2D_DESC depthDesc;
         ZeroMemory(&depthDesc, sizeof(depthDesc));
         depthDesc.ArraySize = 1;
@@ -174,10 +173,9 @@ bool GraphicsManager::Initialize(HWND hWnd, HINSTANCE hInstance)
         depthStencilViewDesc.Texture2D.MipSlice = 0;
 
         result = mD3DDevice->CreateDepthStencilView(mD3DDepthBufferTexture, &depthStencilViewDesc, &mD3DDepthStencilView);
-#endif
 
         mD3DDeviceContext->OMSetRenderTargets(1, &mD3DBackBufferTarget, mD3DDepthStencilView);
-				CreateViewport((float)windowHeight, (float)windowWidth);
+				SetViewport((float)windowHeight, (float)windowWidth);
 
 				successful = true;
 			}
@@ -209,7 +207,7 @@ HINSTANCE GraphicsManager::GetWindowInstance()
   return mHInstance;
 }
 
-void GraphicsManager::CreateViewport(float height, float width)
+void GraphicsManager::SetViewport(float height, float width)
 {
 	D3D11_VIEWPORT mainViewport;
 	mainViewport.Height = height;
