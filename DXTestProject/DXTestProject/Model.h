@@ -37,6 +37,9 @@ public:
 	void Update(float dt);
   void Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos);
 
+  const XMFLOAT3* GetVertices();
+  int GetVertexCount();
+
 protected:
   friend class ModelBuilder;
   Model();
@@ -53,6 +56,7 @@ protected:
   ID3D11ShaderResourceView *mTextureView;
   ID3D11SamplerState *mTextureSamplerState;
 
+  XMFLOAT3 *mVertices;
   int mNumberOfVertices;
   int mSizeOfVertexDesc;
 

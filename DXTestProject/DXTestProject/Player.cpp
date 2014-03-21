@@ -15,8 +15,7 @@
 
 Player::Player(): 
 GameObject(),
-  mPlayerModel(NULL),
-  mSatelliteModel(NULL)
+  mPlayerModel(NULL)
 {
 }
 
@@ -32,55 +31,24 @@ Player::~Player()
 void Player::Initialize()
 {
   mPlayerModel = ModelUtils::CreateCubeModelPCNT();
-  mSatelliteModel = ModelUtils::CreateCubeModelPCNT();
-  mLightModel = ModelUtils::CreateCubeModelPCNT();
-
-  XMFLOAT3 playerScale(5.0f, 5.0f, 5.0f);
-  SetScale(playerScale);
-
-  XMFLOAT3 satellitePosition(2.75f, 0.0f, 0.0f);
-  mSatelliteModel->SetPosition(satellitePosition);
-
-  XMFLOAT3 satelliteScale(0.5f, 0.5f, 0.5f);
-  mSatelliteModel->SetScale(satelliteScale);
 }
 
 void Player::Update(float dt)
 {
-  XMFLOAT3 satelliteRotation = mSatelliteModel->GetRotation();
-  satelliteRotation.y += 1.0f * dt;
-  mSatelliteModel->SetRotation(satelliteRotation);
-
-  static float scale = mSatelliteModel->GetScale().x;
-  static float direction = 1.0f;
-  scale += dt * direction;
-  if (scale > 5.0f)
-  {
-
-  }
-
-  mRotation.x -= 1.0f * dt;
-
   mPlayerModel->Update(dt);
-  mSatelliteModel->Update(dt);
 }
 
 void Player::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
 {
+  /* Since we're now leveraging the matrix stack, we can just push our transformation matrices right into it.
+   * Remember that we push them in the OPPOSITE direction we expect them multiplied; it's LIFO, so we multiply
+   * starting at the end, and moving towards the first element we pushed in. */
   MatrixStack matrix;
+  matrix.PushMatrix(world);
 
-  matrix.PushMatrix(XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z));
-  matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mRotation.x, mRotation.y, mRotation.z));
   matrix.PushMatrix(XMMatrixScaling(mScale.x, mScale.y, mScale.z));
+  matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mRotation.x, mRotation.y, mRotation.z));
+  matrix.PushMatrix(XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z));
 
   mPlayerModel->Paint(matrix.GetCurrentMatrix(), camera, lightPos);
-
-  XMFLOAT3 satellitePosition = mSatelliteModel->GetPosition();
-  XMFLOAT3 satelliteRotation = mSatelliteModel->GetRotation();
-  XMFLOAT3 satlliteScale = mSatelliteModel->GetScale();
-
-  matrix.PushMatrix(XMMatrixScaling(satlliteScale.x, satlliteScale.y, satlliteScale.z)); // Scaling
-  matrix.PushMatrix(XMMatrixRotationRollPitchYaw(satelliteRotation.x, satelliteRotation.y, satelliteRotation.z));
-  matrix.PushMatrix(XMMatrixTranslation(satellitePosition.x, satellitePosition.y, satellitePosition.z));
-  mSatelliteModel->Paint(matrix.GetCurrentMatrix(), camera, lightPos);
 }

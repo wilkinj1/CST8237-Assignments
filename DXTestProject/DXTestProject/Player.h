@@ -18,8 +18,6 @@ public:
 
 protected:
   Model *mPlayerModel;
-  Model *mSatelliteModel;
-  Model *mLightModel;
 
   void Paint(const XMMATRIX &world, const XMMATRIX &viewProj, const XMFLOAT4 &cameraPos) { }
 };

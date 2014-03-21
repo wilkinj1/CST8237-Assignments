@@ -25,9 +25,12 @@ public:
 
 protected:
 	Player *mPlayer;
+  Player *mSatellitePlayer;
   float mDT;
   int mScore;
 
   Model *mLightModel;
   PointLight mLight;
+
+  void CheckCollisions();
 };

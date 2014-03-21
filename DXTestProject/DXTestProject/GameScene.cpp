@@ -15,6 +15,7 @@
 GameScene::GameScene(): Scene()
 {
 	mPlayer = NULL;
+  mSatellitePlayer = NULL;
   mDT = 10.0f;
   mScore = 0;
 }
@@ -27,6 +28,12 @@ GameScene::~GameScene()
     mPlayer = NULL;
 	}
 
+  if (mSatellitePlayer)
+  {
+    delete mSatellitePlayer;
+    mSatellitePlayer = NULL;
+  }
+
   if (mLightModel)
   {
     BasicShaderModelBuilder::Destroy(mLightModel);
@@ -37,8 +44,12 @@ GameScene::~GameScene()
 void GameScene::Initialize()
 {
 	mSceneCamera = new Camera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, -50.0f, 1.0f));
-	mPlayer = new Player();
+	
+  mPlayer = new Player();
 	mPlayer->Initialize();
+
+  mSatellitePlayer = new Player();
+  mSatellitePlayer->Initialize();
 
   mLightModel = ModelUtils::CreateCubeModelPCNT();
 
@@ -47,12 +58,31 @@ void GameScene::Initialize()
   mLight.diffuseColor = XMFLOAT3(1.0f, 1.0f, 1.0f);
   mLight.intensity = 1.0f;
 
+  XMFLOAT3 playerScale(5.0f, 5.0f, 5.0f);
+  mPlayer->SetScale(playerScale);
+
+  XMFLOAT3 satellitePosition(2.75f, 0.0f, 0.0f);
+  mSatellitePlayer->SetPosition(satellitePosition);
+
+  XMFLOAT3 satelliteScale(0.5f, 0.5f, 0.5f);
+  mSatellitePlayer->SetScale(satelliteScale);
+
 	mIsInitialized = true;
 }
 
 void GameScene::Update(float dt)
 {
+  XMFLOAT3 satelliteRotation = mSatellitePlayer->GetRotation();
+  satelliteRotation.y += 1.0f * dt;
+  mSatellitePlayer->SetRotation(satelliteRotation);
+
+  XMFLOAT3 playerRotation = mPlayer->GetRotation();
+  playerRotation.x -= 1.0f * dt;
+  mPlayer->SetRotation(playerRotation);
+
 	mPlayer->Update(dt);
+  mSatellitePlayer->Update(dt);
+
 	mSceneCamera->Update(dt);
 
   mLightModel->Update(dt);
@@ -67,6 +97,15 @@ void GameScene::Paint()
   mLightModel->Paint(matrix.GetCurrentMatrix(), mSceneCamera, mLight.position);
 
   mPlayer->Paint(XMMatrixIdentity(), mSceneCamera, mLight.position);
+
+  /* We now have to position our new satellite player based on where our player is. This is as simple as calculating our
+   * player's world matrix, and then just passing it into the Player; it handles the rest itself!*/
+  matrix.Clear();
+  matrix.PushMatrix(XMMatrixTranslation(mPlayer->GetPosition().x, mPlayer->GetPosition().y, mPlayer->GetPosition().z));
+  matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mPlayer->GetRotation().x, mPlayer->GetRotation().y, mPlayer->GetRotation().z));
+  matrix.PushMatrix(XMMatrixScaling(mPlayer->GetScale().x, mPlayer->GetScale().y, mPlayer->GetScale().z));
+
+  mSatellitePlayer->Paint(matrix.GetCurrentMatrix(), mSceneCamera, mLight.position);
 }
 
 void GameScene::OnEnter() {   }
@@ -121,4 +160,9 @@ void GameScene::HandleInput(UINT wParam, UINT lParam)
     }
     break;
   }
+}
+
+void GameScene::CheckCollisions()
+{
+
 }

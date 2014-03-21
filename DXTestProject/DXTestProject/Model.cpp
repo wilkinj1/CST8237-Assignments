@@ -20,7 +20,9 @@ GameObject(),
 	mVertexShader(NULL),
 	mFragmentShader(NULL),
 	mMatrixBuffer(NULL),
-  mLightBuffer(NULL)
+  mLightBuffer(NULL),
+  mVertices(NULL),
+  mNumberOfVertices(NULL)
 {
 }
 
@@ -69,4 +71,9 @@ void Model::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
   dc->VSSetConstantBuffers(1, 1, &mLightBuffer);
 
 	dc->Draw(mNumberOfVertices, 0);
+}
+
+int Model::GetVertexCount()
+{
+  return mNumberOfVertices;
 }
