@@ -63,13 +63,13 @@ float4 BasicFragmentShader( FragmentShaderInput input ) : SV_TARGET
 {
 	float3 ambientColor = float3(0.2f, 0.2f, 0.2f);
 	//output.ambientIntensity = 1.0f;
-	float3 color = float3(0.7f, 0.7f, 0.7f);
+	float3 colour = float3(0.7f, 0.7f, 0.7f);
 
 	float3 normal = normalize(input.normal);
 	float3 lightVec = normalize(input.lightVector);
 	float diffuseTerm = clamp( dot(normal, lightVec), 0.0f, 1.0f );
 	
 	float4 textureColor = mainTexture.Sample(textureState, input.texUV);
-	float3 finalColor = (ambientColor + color * diffuseTerm);
+	float3 finalColor = input.colour * (ambientColor + colour * diffuseTerm);
 	return textureColor * float4(finalColor, 1.0f);
 }

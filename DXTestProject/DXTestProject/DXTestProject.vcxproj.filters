@@ -69,9 +69,6 @@
     <ClInclude Include="GraphicsIncludes.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="ModelUtils.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="BasicShaderModelBuilder.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -85,6 +82,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelUtils.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -125,14 +125,14 @@
     <ClCompile Include="MatrixStack.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="ModelUtils.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="BasicShaderModelBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelUtils.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
