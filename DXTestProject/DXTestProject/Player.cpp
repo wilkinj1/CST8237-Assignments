@@ -45,10 +45,23 @@ void Player::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
    * starting at the end, and moving towards the first element we pushed in. */
   MatrixStack matrix;
   matrix.PushMatrix(world);
+  matrix.PushMatrix(GetWorldTransform());
+
+  mPlayerModel->Paint(matrix.GetCurrentMatrix(), camera, lightPos);
+}
+
+XMMATRIX Player::GetWorldTransform()
+{
+  MatrixStack matrix;
 
   matrix.PushMatrix(XMMatrixScaling(mScale.x, mScale.y, mScale.z));
   matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mRotation.x, mRotation.y, mRotation.z));
   matrix.PushMatrix(XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z));
 
-  mPlayerModel->Paint(matrix.GetCurrentMatrix(), camera, lightPos);
+  return matrix.GetCurrentMatrix();
+}
+
+Model* Player::GetModel()
+{
+  return mPlayerModel;
 }

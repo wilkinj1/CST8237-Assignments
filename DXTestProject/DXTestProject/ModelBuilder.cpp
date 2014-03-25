@@ -28,7 +28,6 @@ Model* ModelBuilder::Create(const MODEL_DESC &modelDesc, const SHADER_DESC &vert
 	GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
   ID3D11Device *device = gm->GetGraphicsDevice();
 
-
   D3DX11_IMAGE_LOAD_INFO imageInfo;
   HRESULT result = D3DX11CreateShaderResourceViewFromFile(device, L"./IC504917.png", &imageInfo, NULL, &newModel->mTextureView, NULL);
 
@@ -132,6 +131,12 @@ Model* ModelBuilder::Create(const MODEL_DESC &modelDesc, const SHADER_DESC &vert
 
 	vertexShaderCode->Release();
 	fragmentShaderCode->Release();
+
+  std::vector<XMFLOAT3> &vertices = newModel->mVertices;
+  for (int vertIndex = 0; vertIndex < modelDesc.vertexCount; vertIndex++)
+  {
+    vertices.push_back((*(modelDesc.modelData + vertIndex)).Position);
+  }
 
 	newModel->mNumberOfVertices = modelDesc.vertexCount;
   newModel->mSizeOfVertexDesc = modelDesc.sizeOfVertexDesc;

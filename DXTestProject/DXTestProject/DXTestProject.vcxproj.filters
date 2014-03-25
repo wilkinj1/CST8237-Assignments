@@ -84,6 +84,12 @@
     <ClInclude Include="ModelUtils.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Paintable.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionMesh.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXTestProject.cpp">
@@ -130,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="ModelUtils.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionMesh.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

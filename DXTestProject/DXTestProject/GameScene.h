@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "Lights.h"
+#include "CollisionMesh.h"
 
 class Player;
 class Model;
@@ -32,5 +33,6 @@ protected:
   Model *mLightModel;
   PointLight mLight;
 
+  std::vector<CollisionMesh> mCollidableObjects;
   void CheckCollisions();
 };

@@ -61,11 +61,19 @@ void GameScene::Initialize()
   XMFLOAT3 playerScale(5.0f, 5.0f, 5.0f);
   mPlayer->SetScale(playerScale);
 
-  XMFLOAT3 satellitePosition(2.75f, 0.0f, 0.0f);
+  XMFLOAT3 satellitePosition(2.5f, 0.0f, 0.0f);
   mSatellitePlayer->SetPosition(satellitePosition);
 
   XMFLOAT3 satelliteScale(0.5f, 0.5f, 0.5f);
   mSatellitePlayer->SetScale(satelliteScale);
+
+  CollisionMesh playerMesh;
+  playerMesh.Create(mPlayer->GetModel(), mPlayer);
+  mCollidableObjects.push_back(playerMesh);
+
+  CollisionMesh satelliteMesh;
+  satelliteMesh.Create(mSatellitePlayer->GetModel(), mSatellitePlayer);
+  mCollidableObjects.push_back(satelliteMesh);
 
 	mIsInitialized = true;
 }
@@ -86,6 +94,8 @@ void GameScene::Update(float dt)
 	mSceneCamera->Update(dt);
 
   mLightModel->Update(dt);
+
+  CheckCollisions();
 }
 
 void GameScene::Paint()
@@ -164,5 +174,16 @@ void GameScene::HandleInput(UINT wParam, UINT lParam)
 
 void GameScene::CheckCollisions()
 {
-
+  for (int firstCollidableIndex = 0; firstCollidableIndex + 1 < mCollidableObjects.size(); firstCollidableIndex++)
+  {
+    CollisionMesh &firstMesh = mCollidableObjects[firstCollidableIndex];
+    for (int secondCollidableIndex = firstCollidableIndex + 1; secondCollidableIndex < mCollidableObjects.size(); secondCollidableIndex++)
+    {
+      CollisionMesh &secondMesh = mCollidableObjects[secondCollidableIndex];
+      if (firstMesh.CheckCollisions(secondMesh))
+      {
+        printf("We have a collision!");
+      }
+    }
+  }
 }

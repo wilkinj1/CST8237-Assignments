@@ -7,6 +7,7 @@
 #pragma once
 #include "GraphicsIncludes.h"
 #include "GameObject.h"
+#include <vector>
 
 struct ID3D11Buffer;
 struct ID3D11DeviceContext;
@@ -28,6 +29,17 @@ struct MatrixBuffer
   XMFLOAT4 cameraPos;
 };
 
+// Define the data-type that
+// describes a vertex.
+struct VertexPositionColorNormalTextureUVDescription
+{
+  XMFLOAT3 Position;
+  XMFLOAT3 Color;
+  XMFLOAT3 Normal;
+  XMFLOAT2 TextureUV;
+};
+
+
 class Model: public GameObject
 {
 public:
@@ -37,7 +49,7 @@ public:
 	void Update(float dt);
   void Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos);
 
-  const XMFLOAT3* GetVertices();
+  const std::vector<XMFLOAT3> GetVertices();
   int GetVertexCount();
 
 protected:
@@ -56,7 +68,7 @@ protected:
   ID3D11ShaderResourceView *mTextureView;
   ID3D11SamplerState *mTextureSamplerState;
 
-  XMFLOAT3 *mVertices;
+  std::vector<XMFLOAT3> mVertices;
   int mNumberOfVertices;
   int mSizeOfVertexDesc;
 
