@@ -43,7 +43,7 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
-	mSceneCamera = new Camera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(0.0f, 0.0f, -50.0f, 1.0f));
+	mSceneCamera = new Camera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(5.0f, 0.0f, -40.0f, 1.0f));
 	
   mPlayer = new Player();
 	mPlayer->Initialize();
@@ -61,11 +61,8 @@ void GameScene::Initialize()
   XMFLOAT3 playerScale(5.0f, 5.0f, 5.0f);
   mPlayer->SetScale(playerScale);
 
-  XMFLOAT3 satellitePosition(2.5f, 0.0f, 0.0f);
+  XMFLOAT3 satellitePosition(8.0f, 0.0f, 0.0f);
   mSatellitePlayer->SetPosition(satellitePosition);
-
-  XMFLOAT3 satelliteScale(0.5f, 0.5f, 0.5f);
-  mSatellitePlayer->SetScale(satelliteScale);
 
   CollisionMesh playerMesh;
   playerMesh.Create(mPlayer->GetModel(), mPlayer);
@@ -80,15 +77,7 @@ void GameScene::Initialize()
 
 void GameScene::Update(float dt)
 {
-  XMFLOAT3 satelliteRotation = mSatellitePlayer->GetRotation();
-  satelliteRotation.y += 1.0f * dt;
-  mSatellitePlayer->SetRotation(satelliteRotation);
-
-  XMFLOAT3 playerRotation = mPlayer->GetRotation();
-  playerRotation.x -= 1.0f * dt;
-  mPlayer->SetRotation(playerRotation);
-
-	mPlayer->Update(dt);
+  mPlayer->Update(dt);
   mSatellitePlayer->Update(dt);
 
 	mSceneCamera->Update(dt);
@@ -115,7 +104,7 @@ void GameScene::Paint()
   matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mPlayer->GetRotation().x, mPlayer->GetRotation().y, mPlayer->GetRotation().z));
   matrix.PushMatrix(XMMatrixScaling(mPlayer->GetScale().x, mPlayer->GetScale().y, mPlayer->GetScale().z));
 
-  mSatellitePlayer->Paint(matrix.GetCurrentMatrix(), mSceneCamera, mLight.position);
+  mSatellitePlayer->Paint(XMMatrixIdentity(), mSceneCamera, mLight.position);
 }
 
 void GameScene::OnEnter() {   }
@@ -129,30 +118,46 @@ void GameScene::HandleInput(UINT wParam, UINT lParam)
   {
   case('A'):
     {
-      XMFLOAT4 position = mSceneCamera->GetPosition();
+      /*XMFLOAT4 position = mSceneCamera->GetPosition();
       position.x -= 1.0f;
-      mSceneCamera->SetPosition(position);
+      mSceneCamera->SetPosition(position);*/
+
+      XMFLOAT3 position = mSatellitePlayer->GetPosition();
+      position.x -= 0.5f;
+      mSatellitePlayer->SetPosition(position);
     }
     break;
   case('W'):
     {
-      XMFLOAT4 position = mSceneCamera->GetPosition();
+      /*XMFLOAT4 position = mSceneCamera->GetPosition();
       position.z += 1.0f;
-      mSceneCamera->SetPosition(position);
+      mSceneCamera->SetPosition(position);*/
+
+      XMFLOAT3 position = mSatellitePlayer->GetPosition();
+      position.y += 0.5f;
+      mSatellitePlayer->SetPosition(position);
     }
     break;
   case('S'):
     {
-      XMFLOAT4 position = mSceneCamera->GetPosition();
+      /*XMFLOAT4 position = mSceneCamera->GetPosition();
       position.z -= 1.0f;
-      mSceneCamera->SetPosition(position);
+      mSceneCamera->SetPosition(position);*/
+
+      XMFLOAT3 position = mSatellitePlayer->GetPosition();
+      position.y -= 0.5f;
+      mSatellitePlayer->SetPosition(position);
     }
     break;
   case('D'):
     {
-      XMFLOAT4 position = mSceneCamera->GetPosition();
+      /*XMFLOAT4 position = mSceneCamera->GetPosition();
       position.x += 1.0f;
-      mSceneCamera->SetPosition(position);
+      mSceneCamera->SetPosition(position);*/
+
+      XMFLOAT3 position = mSatellitePlayer->GetPosition();
+      position.x += 0.5f;
+      mSatellitePlayer->SetPosition(position);
     }
     break;
   case('Q'):

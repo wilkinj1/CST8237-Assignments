@@ -132,10 +132,10 @@ Model* ModelBuilder::Create(const MODEL_DESC &modelDesc, const SHADER_DESC &vert
 	vertexShaderCode->Release();
 	fragmentShaderCode->Release();
 
-  std::vector<XMFLOAT3> &vertices = newModel->mVertices;
+  std::vector<VPCNTDesc> &vertices = newModel->mVertices;
   for (int vertIndex = 0; vertIndex < modelDesc.vertexCount; vertIndex++)
   {
-    vertices.push_back((*(modelDesc.modelData + vertIndex)).Position);
+    vertices.push_back((*(modelDesc.modelData + vertIndex)));
   }
 
 	newModel->mNumberOfVertices = modelDesc.vertexCount;

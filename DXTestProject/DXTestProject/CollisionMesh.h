@@ -1,8 +1,7 @@
 #pragma once
 #include "GraphicsIncludes.h"
 #include <vector>
-
-class Model;
+#include "Model.h"
 
 class CollisionMeshDelegate
 {
@@ -17,10 +16,14 @@ public:
   void Create(Model *model, CollisionMeshDelegate *collisionDelegate);
   bool CheckCollisions(CollisionMesh& otherMesh);
 
-  const std::vector<XMFLOAT3>& GetVertices();
+  const std::vector<VPCNTDesc>& GetVertices();
   XMMATRIX GetWorldTransform();
 
 protected:
-  std::vector<XMFLOAT3> mVertices;
+  std::vector<VPCNTDesc> mVertices;
   CollisionMeshDelegate *mDelegate;
+
+  int CheckWinding(XMFLOAT3 firstPoint, XMFLOAT3 secondPoint, XMFLOAT3 thirdPoint, XMFLOAT3 normal);
+
+  std::vector<VPCNTDesc> GetSupportingVertices(std::vector<VPCNTDesc> vertices, XMFLOAT3 normal);
 };

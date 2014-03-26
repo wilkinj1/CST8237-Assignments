@@ -31,13 +31,13 @@ struct MatrixBuffer
 
 // Define the data-type that
 // describes a vertex.
-struct VertexPositionColorNormalTextureUVDescription
+typedef struct VertexPositionColorNormalTextureUVDescription
 {
   XMFLOAT3 Position;
   XMFLOAT3 Color;
   XMFLOAT3 Normal;
   XMFLOAT2 TextureUV;
-};
+} VPCNTDesc;
 
 
 class Model: public GameObject
@@ -49,7 +49,7 @@ public:
 	void Update(float dt);
   void Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos);
 
-  const std::vector<XMFLOAT3> GetVertices();
+  const std::vector<VPCNTDesc> GetVertices();
   int GetVertexCount();
 
 protected:
@@ -68,7 +68,7 @@ protected:
   ID3D11ShaderResourceView *mTextureView;
   ID3D11SamplerState *mTextureSamplerState;
 
-  std::vector<XMFLOAT3> mVertices;
+  std::vector<VPCNTDesc> mVertices;
   int mNumberOfVertices;
   int mSizeOfVertexDesc;
 

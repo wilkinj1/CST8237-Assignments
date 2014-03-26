@@ -12,7 +12,7 @@ struct D3D11_INPUT_ELEMENT_DESC;
 
 struct MODEL_DESC
 {
-  VertexPositionColorNormalTextureUVDescription *modelData; // all of the actual vertices that make up the model.
+  VPCNTDesc *modelData; // all of the actual vertices that make up the model.
   unsigned int sizeOfData; // the total size of all of the model data.
   unsigned int vertexCount; // how many individual vertices we're working with.
   D3D11_INPUT_ELEMENT_DESC *elementDescs; // the description of how the elements in the vertices map to semantics in the shader.

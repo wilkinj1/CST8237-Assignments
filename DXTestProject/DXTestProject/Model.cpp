@@ -77,7 +77,7 @@ int Model::GetVertexCount()
 {
   return mNumberOfVertices;
 }
-const std::vector<XMFLOAT3> Model::GetVertices()
+const std::vector<VertexPositionColorNormalTextureUVDescription> Model::GetVertices()
 {
   return mVertices;
 }
