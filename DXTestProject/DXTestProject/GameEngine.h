@@ -3,7 +3,6 @@
 
 class SceneManager;
 class GraphicsManager;
-class AudioManager;
 
 class GameEngine
 {
@@ -31,6 +30,5 @@ private:
 
 	SceneManager *mSceneManager;
 	GraphicsManager *mGraphicsManager;
-  AudioManager *mAudioManager;
 };
 

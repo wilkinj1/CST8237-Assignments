@@ -90,9 +90,6 @@
     <ClInclude Include="CollisionMesh.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="AudioManager.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="FocusCamera.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -144,9 +141,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CollisionMesh.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="FocusCamera.cpp">

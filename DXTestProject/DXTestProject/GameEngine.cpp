@@ -20,7 +20,6 @@ GameEngine::GameEngine(void):
 {
 	mSceneManager = new SceneManager();
 	mGraphicsManager = new GraphicsManager();
-  mAudioManager = new AudioManager();
 }
 
 GameEngine::~GameEngine(void)
@@ -34,11 +33,6 @@ GameEngine::~GameEngine(void)
 	{
 		delete mGraphicsManager;
 	}
-
-  if (mAudioManager)
-  {
-    delete mAudioManager;
-  }
 }
 
 GameEngine* GameEngine::GetInstance()
@@ -64,7 +58,6 @@ bool GameEngine::Initialize(HWND hWnd, HINSTANCE hInstance)
 	if(!IsInitialized())
 	{
 		mIsInitialized = mGraphicsManager->Initialize(hWnd, hInstance);
-    mAudioManager->Initialize();
     CreateConsoleWindow();
 	}
 	return IsInitialized();
