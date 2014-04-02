@@ -82,6 +82,8 @@ void GameScene::Initialize()
 
 void GameScene::Update(float dt)
 {
+  HandleInput();
+
   mPlayer->Update(dt);
   mSatellitePlayer->Update(dt);
 
@@ -117,7 +119,7 @@ void GameScene::OnExit()
 {
 }
 
-void GameScene::HandleInput(UINT wParam, UINT lParam)
+void GameScene::HandleInput()
 {
   Player *movingPlayer = mSatellitePlayer;
 

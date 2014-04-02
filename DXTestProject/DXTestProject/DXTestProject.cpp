@@ -180,9 +180,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       return DefWindowProc(hWnd, message, wParam, lParam);
     }
     break;
-  case WM_KEYDOWN:
-    GameEngine::GetInstance()->GetSceneManager()->GetActiveScene()->HandleInput(wParam, lParam);
-    break;
 
   case WM_PAINT:
     hdc = BeginPaint(hWnd, &ps);

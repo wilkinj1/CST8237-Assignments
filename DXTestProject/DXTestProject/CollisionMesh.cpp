@@ -381,6 +381,5 @@ bool CollisionMesh::CheckCollisionsCustom(CollisionMesh &otherMesh)
     }
   }
 
-  printf("Vertices: %d", positions.size());
   return positions.size();
 }

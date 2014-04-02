@@ -22,7 +22,7 @@ public:
   void OnEnter();
   void OnExit();
 
-  void HandleInput(UINT wParam, UINT lParam);
+  void HandleInput();
 
 protected:
 	Player *mPlayer;
