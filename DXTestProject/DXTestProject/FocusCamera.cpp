@@ -19,8 +19,8 @@ void FocusCamera::RotateBy(XMFLOAT3 angle)
   XMVECTOR lookAtTargetPos = XMLoadFloat4(&mLookAtTarget);
   XMVECTOR newPosition = XMVector4Transform(lookAtTargetPos, transform);
 
-  XMStoreFloat4(&mPosition, newPosition);
+  XMFLOAT4 newPositionValue;
+  XMStoreFloat4(&newPositionValue, newPosition);
 
-  mRecalculateProjectionMatrix = true;
-  mRecalculateViewMatrix = true;
+  SetPosition(newPositionValue);
 }

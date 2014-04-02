@@ -22,7 +22,7 @@ public:
   void OnEnter();
   void OnExit();
 
-  void HandleInput();
+  void HandleInput(float dt);
 
 protected:
 	Player *mPlayer;

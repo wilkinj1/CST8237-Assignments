@@ -35,7 +35,7 @@ public:
    */
 	virtual void Paint() = 0;
 
-  virtual void HandleInput() { }
+  virtual void HandleInput(float dt) { }
 
   /** Whether or not the scene has been initialized yet.
    */

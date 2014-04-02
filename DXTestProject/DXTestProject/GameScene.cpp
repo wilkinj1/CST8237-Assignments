@@ -82,7 +82,7 @@ void GameScene::Initialize()
 
 void GameScene::Update(float dt)
 {
-  HandleInput();
+  HandleInput(dt);
 
   mPlayer->Update(dt);
   mSatellitePlayer->Update(dt);
@@ -119,80 +119,83 @@ void GameScene::OnExit()
 {
 }
 
-void GameScene::HandleInput()
+void GameScene::HandleInput(float dt)
 {
   Player *movingPlayer = mSatellitePlayer;
+  const float PlayerMovementSpeed = 5.0f;
+  const float CameraMovementSpeed = 5.0f;
+  const float CameraRotation = 20.0f;
 
   if (GetAsyncKeyState('A'))
   {
     XMFLOAT4 position = mSceneCamera->GetPosition();
-    position.x -= 1.0f;
+    position.x -= CameraMovementSpeed * dt;
     //mSceneCamera->SetPosition(position);
 
     XMFLOAT3 angle;
-    angle.y = XMConvertToRadians(20.0f);
+    angle.y = XMConvertToRadians(CameraRotation) * dt;
     ((FocusCamera *)mSceneCamera)->RotateBy(angle);
   }
   else if (GetAsyncKeyState('D'))
   {
     XMFLOAT4 position = mSceneCamera->GetPosition();
-    position.x += 1.0f;
+    position.x += CameraMovementSpeed * dt;
     //mSceneCamera->SetPosition(position);
 
     XMFLOAT3 angle;
-    angle.y = XMConvertToRadians(-20.0f);
+    angle.y = XMConvertToRadians(-CameraRotation) * dt;
     ((FocusCamera *)mSceneCamera)->RotateBy(angle);
   }
   
   if (GetAsyncKeyState('W'))
   {
     XMFLOAT4 position = mSceneCamera->GetPosition();
-    position.z += 1.0f;
+    position.z += CameraMovementSpeed * dt;
     mSceneCamera->SetPosition(position);
   }
   else if (GetAsyncKeyState('S'))
   {
     XMFLOAT4 position = mSceneCamera->GetPosition();
-    position.z -= 1.0f;
+    position.z -= CameraMovementSpeed * dt;
     mSceneCamera->SetPosition(position);
   }
 
   if (GetAsyncKeyState('Q'))
   {
     XMFLOAT4 position = mSceneCamera->GetPosition();
-    position.y += 1.0f;
+    position.y += CameraMovementSpeed * dt;
     mSceneCamera->SetPosition(position);
   }
   else if (GetAsyncKeyState('E'))
   {
     XMFLOAT4 position = mSceneCamera->GetPosition();
-    position.y -= 1.0f;
+    position.y -= CameraMovementSpeed * dt;
     mSceneCamera->SetPosition(position);
   }
 
   if (GetAsyncKeyState('J'))
   {
     XMFLOAT3 position = movingPlayer->GetPosition();
-    position.x -= 0.5f;
+    position.x -= PlayerMovementSpeed * dt;
     movingPlayer->SetPosition(position);
   }
   else if (GetAsyncKeyState('L'))
   {
     XMFLOAT3 position = movingPlayer->GetPosition();
-    position.x += 0.5f;
+    position.x += PlayerMovementSpeed * dt;
     movingPlayer->SetPosition(position);
   }
 
   if (GetAsyncKeyState('I'))
   {
     XMFLOAT3 position = movingPlayer->GetPosition();
-    position.y += 0.5f;
+    position.y += PlayerMovementSpeed * dt;
     movingPlayer->SetPosition(position);
   }
   else if (GetAsyncKeyState('K'))
   {
     XMFLOAT3 position = movingPlayer->GetPosition();
-    position.y -= 0.5f;
+    position.y -= PlayerMovementSpeed * dt;
     movingPlayer->SetPosition(position);
   }
 }
