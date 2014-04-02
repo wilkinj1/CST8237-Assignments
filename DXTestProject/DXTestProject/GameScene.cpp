@@ -106,10 +106,10 @@ void GameScene::Paint()
 
   /* We now have to position our new satellite player based on where our player is. This is as simple as calculating our
    * player's world matrix, and then just passing it into the Player; it handles the rest itself!*/
-  matrix.Clear();
-  matrix.PushMatrix(XMMatrixTranslation(mPlayer->GetPosition().x, mPlayer->GetPosition().y, mPlayer->GetPosition().z));
-  matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mPlayer->GetRotation().x, mPlayer->GetRotation().y, mPlayer->GetRotation().z));
-  matrix.PushMatrix(XMMatrixScaling(mPlayer->GetScale().x, mPlayer->GetScale().y, mPlayer->GetScale().z));
+  //matrix.Clear();
+  //matrix.PushMatrix(XMMatrixTranslation(mPlayer->GetPosition().x, mPlayer->GetPosition().y, mPlayer->GetPosition().z));
+  //matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mPlayer->GetRotation().x, mPlayer->GetRotation().y, mPlayer->GetRotation().z));
+  //matrix.PushMatrix(XMMatrixScaling(mPlayer->GetScale().x, mPlayer->GetScale().y, mPlayer->GetScale().z));
 
   mSatellitePlayer->Paint(XMMatrixIdentity(), mSceneCamera, mLight.position);
 }
