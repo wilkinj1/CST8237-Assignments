@@ -126,6 +126,9 @@ void GameScene::HandleInput(float dt)
   const float CameraMovementSpeed = 5.0f;
   const float CameraRotation = 20.0f;
 
+  // Cache the old player position so that we can set the position back to it.
+  XMFLOAT3 oldPlayerPosition = movingPlayer->GetPosition();
+
   if (GetAsyncKeyState('A'))
   {
     XMFLOAT4 position = mSceneCamera->GetPosition();
@@ -175,29 +178,32 @@ void GameScene::HandleInput(float dt)
 
   if (GetAsyncKeyState('J'))
   {
-    XMFLOAT3 position = movingPlayer->GetPosition();
+    XMFLOAT3 position = oldPlayerPosition;
     position.x -= PlayerMovementSpeed * dt;
     movingPlayer->SetPosition(position);
   }
   else if (GetAsyncKeyState('L'))
   {
-    XMFLOAT3 position = movingPlayer->GetPosition();
+    XMFLOAT3 position = oldPlayerPosition;
     position.x += PlayerMovementSpeed * dt;
     movingPlayer->SetPosition(position);
   }
 
   if (GetAsyncKeyState('I'))
   {
-    XMFLOAT3 position = movingPlayer->GetPosition();
+    XMFLOAT3 position = oldPlayerPosition;
     position.y += PlayerMovementSpeed * dt;
     movingPlayer->SetPosition(position);
   }
   else if (GetAsyncKeyState('K'))
   {
-    XMFLOAT3 position = movingPlayer->GetPosition();
+    XMFLOAT3 position = oldPlayerPosition;
     position.y -= PlayerMovementSpeed * dt;
     movingPlayer->SetPosition(position);
   }
+
+  // if we're colliding, we set the position back to what it was before.
+  //movingPlayer->SetPosition(oldPlayerPosition);
 }
 
 void GameScene::CheckCollisions()

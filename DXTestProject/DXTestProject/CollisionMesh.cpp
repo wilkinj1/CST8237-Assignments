@@ -272,7 +272,7 @@ bool CollisionMesh::CheckCollisionsCustom(CollisionMesh &otherMesh)
   XMVECTOR theirOriginDisplacement = XMVector3Transform(XMVectorSet(origin.x, origin.y, origin.z, 0.0f), otherWorld);
   XMMATRIX theirOriginTransform = XMMatrixTranslationFromVector(XMVectorMultiply(theirOriginDisplacement, inverse));
 
-  XMMATRIX ourOriginTranslatedWorld = ourOriginTransform * world;
+  XMMATRIX ourOriginTranslatedWorld = world * ourOriginTransform;
   XMMATRIX theirOriginTranslatedWorld = otherWorld * ourOriginTransform;
   XMMATRIX theirOriginTranslatedWorldNormalAdjustment = theirOriginTransform * otherWorld;
 
