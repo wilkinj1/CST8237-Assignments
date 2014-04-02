@@ -54,9 +54,9 @@ XMMATRIX Player::GetWorldTransform()
 {
   MatrixStack matrix;
 
-  matrix.PushMatrix(XMMatrixScaling(mScale.x, mScale.y, mScale.z));
   matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mRotation.x, mRotation.y, mRotation.z));
   matrix.PushMatrix(XMMatrixTranslation(mPosition.x, mPosition.y, mPosition.z));
+  matrix.PushMatrix(XMMatrixScaling(mScale.x, mScale.y, mScale.z));
 
   return matrix.GetCurrentMatrix();
 }

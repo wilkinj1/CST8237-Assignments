@@ -58,7 +58,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dx11.lib;dxerr.lib;xaudio2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -82,10 +82,12 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BasicShaderModelBuilder.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CollisionMesh.h" />
     <ClInclude Include="DXTestProject.h" />
+    <ClInclude Include="FocusCamera.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameScene.h" />
@@ -107,10 +109,12 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BasicShaderModelBuilder.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionMesh.cpp" />
     <ClCompile Include="DXTestProject.cpp" />
+    <ClCompile Include="FocusCamera.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameTimer.cpp" />

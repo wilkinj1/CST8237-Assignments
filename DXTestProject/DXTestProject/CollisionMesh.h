@@ -14,7 +14,9 @@ class CollisionMesh
 public:
   CollisionMesh();
   void Create(Model *model, CollisionMeshDelegate *collisionDelegate);
-  bool CheckCollisions(CollisionMesh& otherMesh);
+  bool CheckCollisionsGJK1(CollisionMesh& otherMesh);
+  bool CheckCollisionsGJK2(CollisionMesh& otherMesh);
+  bool CheckCollisionsCustom(CollisionMesh &otherMesh);
 
   const std::vector<VPCNTDesc>& GetVertices();
   XMMATRIX GetWorldTransform();

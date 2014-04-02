@@ -2,7 +2,7 @@
 #include "GameScene.h"
 #include <d3d11.h>
 #include "Player.h"
-#include "Camera.h"
+#include "FocusCamera.h"
 
 #include "GameEngine.h"
 #include "GraphicsManager.h"
@@ -43,7 +43,7 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
-	mSceneCamera = new Camera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(5.0f, 0.0f, -40.0f, 1.0f));
+	mSceneCamera = new FocusCamera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(5.0f, 0.0f, -20.0f, 1.0f));
 	
   mPlayer = new Player();
 	mPlayer->Initialize();
@@ -61,8 +61,13 @@ void GameScene::Initialize()
   XMFLOAT3 playerScale(5.0f, 5.0f, 5.0f);
   mPlayer->SetScale(playerScale);
 
+  XMFLOAT3 playerPosition(0.0f, 0.0f, 0.0f);
+  mPlayer->SetPosition(playerPosition);
+
   XMFLOAT3 satellitePosition(8.0f, 0.0f, 0.0f);
   mSatellitePlayer->SetPosition(satellitePosition);
+
+  mSceneCamera->SetLookAtTarget(XMFLOAT4(playerPosition.x, playerPosition.y, playerPosition.z, 1.0f));
 
   CollisionMesh playerMesh;
   playerMesh.Create(mPlayer->GetModel(), mPlayer);
@@ -114,66 +119,79 @@ void GameScene::OnExit()
 
 void GameScene::HandleInput(UINT wParam, UINT lParam)
 {
-  switch(wParam)
+  Player *movingPlayer = mSatellitePlayer;
+
+  if (GetAsyncKeyState('A'))
   {
-  case('A'):
-    {
-      /*XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.x -= 1.0f;
-      mSceneCamera->SetPosition(position);*/
+    XMFLOAT4 position = mSceneCamera->GetPosition();
+    position.x -= 1.0f;
+    //mSceneCamera->SetPosition(position);
 
-      XMFLOAT3 position = mSatellitePlayer->GetPosition();
-      position.x -= 0.5f;
-      mSatellitePlayer->SetPosition(position);
-    }
-    break;
-  case('W'):
-    {
-      /*XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.z += 1.0f;
-      mSceneCamera->SetPosition(position);*/
+    XMFLOAT3 angle;
+    angle.y = XMConvertToRadians(20.0f);
+    ((FocusCamera *)mSceneCamera)->RotateBy(angle);
+  }
+  else if (GetAsyncKeyState('D'))
+  {
+    XMFLOAT4 position = mSceneCamera->GetPosition();
+    position.x += 1.0f;
+    //mSceneCamera->SetPosition(position);
 
-      XMFLOAT3 position = mSatellitePlayer->GetPosition();
-      position.y += 0.5f;
-      mSatellitePlayer->SetPosition(position);
-    }
-    break;
-  case('S'):
-    {
-      /*XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.z -= 1.0f;
-      mSceneCamera->SetPosition(position);*/
+    XMFLOAT3 angle;
+    angle.y = XMConvertToRadians(-20.0f);
+    ((FocusCamera *)mSceneCamera)->RotateBy(angle);
+  }
+  
+  if (GetAsyncKeyState('W'))
+  {
+    XMFLOAT4 position = mSceneCamera->GetPosition();
+    position.z += 1.0f;
+    mSceneCamera->SetPosition(position);
+  }
+  else if (GetAsyncKeyState('S'))
+  {
+    XMFLOAT4 position = mSceneCamera->GetPosition();
+    position.z -= 1.0f;
+    mSceneCamera->SetPosition(position);
+  }
 
-      XMFLOAT3 position = mSatellitePlayer->GetPosition();
-      position.y -= 0.5f;
-      mSatellitePlayer->SetPosition(position);
-    }
-    break;
-  case('D'):
-    {
-      /*XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.x += 1.0f;
-      mSceneCamera->SetPosition(position);*/
+  if (GetAsyncKeyState('Q'))
+  {
+    XMFLOAT4 position = mSceneCamera->GetPosition();
+    position.y += 1.0f;
+    mSceneCamera->SetPosition(position);
+  }
+  else if (GetAsyncKeyState('E'))
+  {
+    XMFLOAT4 position = mSceneCamera->GetPosition();
+    position.y -= 1.0f;
+    mSceneCamera->SetPosition(position);
+  }
 
-      XMFLOAT3 position = mSatellitePlayer->GetPosition();
-      position.x += 0.5f;
-      mSatellitePlayer->SetPosition(position);
-    }
-    break;
-  case('Q'):
-    {
-      XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.y += 1.0f;
-      mSceneCamera->SetPosition(position);
-    }
-    break;
-  case('E'):
-    {
-      XMFLOAT4 position = mSceneCamera->GetPosition();
-      position.y -= 1.0f;
-      mSceneCamera->SetPosition(position);
-    }
-    break;
+  if (GetAsyncKeyState('J'))
+  {
+    XMFLOAT3 position = movingPlayer->GetPosition();
+    position.x -= 0.5f;
+    movingPlayer->SetPosition(position);
+  }
+  else if (GetAsyncKeyState('L'))
+  {
+    XMFLOAT3 position = movingPlayer->GetPosition();
+    position.x += 0.5f;
+    movingPlayer->SetPosition(position);
+  }
+
+  if (GetAsyncKeyState('I'))
+  {
+    XMFLOAT3 position = movingPlayer->GetPosition();
+    position.y += 0.5f;
+    movingPlayer->SetPosition(position);
+  }
+  else if (GetAsyncKeyState('K'))
+  {
+    XMFLOAT3 position = movingPlayer->GetPosition();
+    position.y -= 0.5f;
+    movingPlayer->SetPosition(position);
   }
 }
 
@@ -185,9 +203,17 @@ void GameScene::CheckCollisions()
     for (int secondCollidableIndex = firstCollidableIndex + 1; secondCollidableIndex < mCollidableObjects.size(); secondCollidableIndex++)
     {
       CollisionMesh &secondMesh = mCollidableObjects[secondCollidableIndex];
-      if (firstMesh.CheckCollisions(secondMesh))
+
+      if (&firstMesh != &secondMesh)
       {
-        printf("We have a collision!");
+        if (firstMesh.CheckCollisionsCustom(secondMesh))
+        {
+          printf("We have a collision!\n");
+        }
+        else
+        {
+          printf("No collision!\n");
+        }
       }
     }
   }

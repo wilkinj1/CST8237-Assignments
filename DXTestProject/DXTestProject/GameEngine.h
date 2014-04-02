@@ -3,6 +3,7 @@
 
 class SceneManager;
 class GraphicsManager;
+class AudioManager;
 
 class GameEngine
 {
@@ -26,7 +27,10 @@ private:
 	static GameEngine *mEngineInstance;
 	bool mIsInitialized;
 
+  void CreateConsoleWindow();
+
 	SceneManager *mSceneManager;
 	GraphicsManager *mGraphicsManager;
+  AudioManager *mAudioManager;
 };
 
