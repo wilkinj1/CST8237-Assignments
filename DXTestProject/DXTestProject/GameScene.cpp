@@ -202,6 +202,11 @@ void GameScene::HandleInput(float dt)
     movingPlayer->SetPosition(position);
   }
 
+  if (GetAsyncKeyState('X'))
+  {
+    PostQuitMessage(0);
+  }
+
   // if we're colliding, we set the position back to what it was before.
   //movingPlayer->SetPosition(oldPlayerPosition);
 }

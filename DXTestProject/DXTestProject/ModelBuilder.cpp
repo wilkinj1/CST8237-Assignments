@@ -22,27 +22,16 @@
 
 ModelBuilder::ModelBuilder() { }
 
-Model* ModelBuilder::Create(const MODEL_DESC &modelDesc, const SHADER_DESC &vertexDesc, const SHADER_DESC &pixelDesc)
+Model* ModelBuilder::Create(MODEL_DESC & const modelDesc, SHADER_DESC & const vertexDesc, SHADER_DESC & const pixelDesc, TEXTURE_DESC & const textureDesc)
 {
 	Model *newModel = new Model();
 	GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
   ID3D11Device *device = gm->GetGraphicsDevice();
 
-  D3DX11_IMAGE_LOAD_INFO imageInfo;
-  HRESULT result = D3DX11CreateShaderResourceViewFromFile(device, L"./IC504917.png", &imageInfo, NULL, &newModel->mTextureView, NULL);
+  HRESULT result;
+  newModel->mTextureView = ResourceManager::GetInstance()->LoadTexture(textureDesc.filepath);
 
-  assert(SUCCEEDED(result));
-
-  D3D11_SAMPLER_DESC samplerDesc;
-  ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
-  samplerDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
-  samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-  samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-  samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-  samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-  samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-  result = device->CreateSamplerState(&samplerDesc, &newModel->mTextureSamplerState);
+  result = device->CreateSamplerState((const D3D11_SAMPLER_DESC *)&textureDesc.samplerDesc, &newModel->mTextureSamplerState);
   assert(SUCCEEDED(result));
 
   D3D11_BUFFER_DESC matrixBufferDesc;
@@ -82,55 +71,8 @@ Model* ModelBuilder::Create(const MODEL_DESC &modelDesc, const SHADER_DESC &vert
 
 	assert(SUCCEEDED(result));
 
-	ID3DBlob *vertexShaderCode = NULL, *fragmentShaderCode = NULL;
-	ID3DBlob *errorMessage = nullptr;
-
-	//result = GraphicsManager::CompileShaderFromFile(L"./basicShader.fx", "BasicVertexShader", "vs_4_0", &vertexShaderCode, &errorMessage);
-  result = D3DX11CompileFromFile(vertexDesc.filepath, NULL, NULL, vertexDesc.entryPoint, vertexDesc.profile, 0, 0, NULL, &vertexShaderCode, &errorMessage, NULL);
-
-	if(errorMessage != NULL)
-	{
-		std::string output = (char *)errorMessage->GetBufferPointer();
-		errorMessage->Release();
-	}
-
-	assert(SUCCEEDED(result));
-
-	//result = GraphicsManager::CompileShaderFromFile(L"./basicShader.fx", "BasicFragmentShader", "ps_4_0", &fragmentShaderCode, &errorMessage);
-  result = D3DX11CompileFromFile(pixelDesc.filepath, NULL, NULL, pixelDesc.entryPoint, pixelDesc.profile, 0, 0, NULL, &fragmentShaderCode, &errorMessage, NULL);
-	if(errorMessage != NULL)
-	{
-		std::string output = (char *)errorMessage->GetBufferPointer();
-		errorMessage->Release();
-	}
-
-	assert(SUCCEEDED(result));
-
-
-	result = device->CreateVertexShader(vertexShaderCode->GetBufferPointer(), vertexShaderCode->GetBufferSize(), NULL, &newModel->mVertexShader);
-
-	if(FAILED(result))
-	{
-		vertexShaderCode->Release();
-	}
-
-	assert(SUCCEEDED(result));
-
-	result = device->CreatePixelShader(fragmentShaderCode->GetBufferPointer(), fragmentShaderCode->GetBufferSize(), NULL, &newModel->mFragmentShader);
-
-	if(FAILED(result))
-	{
-		fragmentShaderCode->Release();
-	}
-
-	assert(SUCCEEDED(result));
-
-	result = device->CreateInputLayout(modelDesc.elementDescs, modelDesc.elementCount, vertexShaderCode->GetBufferPointer(), vertexShaderCode->GetBufferSize(), &newModel->mInputLayout);
-
-	assert(SUCCEEDED(result));
-
-	vertexShaderCode->Release();
-	fragmentShaderCode->Release();
+  newModel->mVertexShader = ResourceManager::GetInstance()->LoadVertexShaderAndInputLayout(vertexDesc, &modelDesc, &newModel->mInputLayout);
+  newModel->mFragmentShader = ResourceManager::GetInstance()->LoadPixelShader(pixelDesc);
 
   std::vector<VPCNTDesc> &vertices = newModel->mVertices;
   for (int vertIndex = 0; vertIndex < modelDesc.vertexCount; vertIndex++)
@@ -152,23 +94,10 @@ void ModelBuilder::Destroy(Model *model)
 		model->mVertexBuffer = NULL;
 	}
 
-	if(model->mInputLayout)
-	{
-		model->mInputLayout->Release();
-		model->mInputLayout = NULL;
-	}
-
-	if(model->mVertexShader)
-	{
-		model->mVertexShader->Release();
-		model->mVertexShader = NULL;
-	}
-
-	if(model->mFragmentShader)
-	{
-		model->mFragmentShader->Release();
-		model->mFragmentShader = NULL;
-	}
+  ResourceManager::GetInstance()->UnloadResource<ID3D11InputLayout>(&model->mInputLayout);
+  ResourceManager::GetInstance()->UnloadResource<ID3D11VertexShader>(&model->mVertexShader);
+  ResourceManager::GetInstance()->UnloadResource<ID3D11PixelShader>(&model->mFragmentShader);
+  ResourceManager::GetInstance()->UnloadResource<ID3D11ShaderResourceView>(&model->mTextureView);
 
 	if(model->mMatrixBuffer)
 	{
@@ -180,12 +109,6 @@ void ModelBuilder::Destroy(Model *model)
   {
     model->mLightBuffer->Release();
     model->mLightBuffer = NULL;
-  }
-
-  if (model->mTextureView)
-  {
-    model->mTextureView->Release();
-    model->mTextureView = NULL;
   }
 
   if (model->mTextureSamplerState)

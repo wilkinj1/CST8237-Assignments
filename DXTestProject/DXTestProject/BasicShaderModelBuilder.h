@@ -5,7 +5,7 @@
 class BasicShaderModelBuilder : public ModelBuilder
 {
 public:
-  static Model* Create(const MODEL_DESC &modelDesc);
+  static Model* Create(MODEL_DESC & const modelDesc);
   static void Destroy(Model *model);
 
 protected:

@@ -85,7 +85,11 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
   };
 
   engine->GetSceneManager()->PopAllScenes();
+
+  delete gs;
+
   GameEngine::Shutdown();
+  ResourceManager::Shutdown();
 
   return (int) msg.wParam;
 }

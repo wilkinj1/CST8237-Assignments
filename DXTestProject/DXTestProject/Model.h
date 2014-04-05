@@ -8,6 +8,7 @@
 #include "GraphicsIncludes.h"
 #include "GameObject.h"
 #include <vector>
+#include "ResourceManager.h"
 
 struct ID3D11Buffer;
 struct ID3D11DeviceContext;
@@ -31,14 +32,6 @@ struct MatrixBuffer
 
 // Define the data-type that
 // describes a vertex.
-typedef struct VertexPositionColorNormalTextureUVDescription
-{
-  XMFLOAT3 Position;
-  XMFLOAT3 Color;
-  XMFLOAT3 Normal;
-  XMFLOAT2 TextureUV;
-} VPCNTDesc;
-
 
 class Model: public GameObject
 {

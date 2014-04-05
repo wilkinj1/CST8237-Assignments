@@ -93,6 +93,9 @@
     <ClInclude Include="FocusCamera.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXTestProject.cpp">
@@ -144,6 +147,9 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="FocusCamera.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
