@@ -24,6 +24,7 @@ public:
   void OnExit();
 
   void HandleInput(float dt);
+  void ViewSizeChanged();
 
 protected:
 	Obstacle *mObstacle;

@@ -44,7 +44,12 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
-	mSceneCamera = new FocusCamera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(5.0f, 0.0f, -20.0f, 1.0f));
+  RECT windowRect;
+  GetClientRect(GameEngine::GetInstance()->GetGraphicsManager()->GetWindowHandle(), &windowRect);
+
+	size_t windowWidth = windowRect.right - windowRect.left;
+	size_t windowHeight = windowRect.bottom - windowRect.top;
+	mSceneCamera = new FocusCamera(XM_PIDIV4, windowWidth, windowHeight, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(5.0f, 0.0f, -20.0f, 1.0f));
 	
   mObstacle = new Obstacle();
 	mObstacle->Initialize();
@@ -79,6 +84,16 @@ void GameScene::Initialize()
   mCollidableObjects.push_back(obstacleMesh);
 
 	mIsInitialized = true;
+}
+
+void GameScene::ViewSizeChanged()
+{
+  RECT windowRect;
+  GetClientRect(GameEngine::GetInstance()->GetGraphicsManager()->GetWindowHandle(), &windowRect);
+
+	size_t windowWidth = windowRect.right - windowRect.left;
+	size_t windowHeight = windowRect.bottom - windowRect.top;
+  mSceneCamera->SetViewSize(windowWidth, windowHeight);
 }
 
 void GameScene::Update(float dt)

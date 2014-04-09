@@ -37,6 +37,8 @@ public:
 
   virtual void HandleInput(float dt) { }
 
+  virtual void ViewSizeChanged() { }
+
   /** Whether or not the scene has been initialized yet.
    */
 	virtual bool isInitialized()

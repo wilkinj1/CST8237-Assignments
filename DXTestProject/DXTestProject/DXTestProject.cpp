@@ -202,6 +202,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       size_t windowHeight = windowRect.bottom - windowRect.top;
 
       GameEngine::GetInstance()->GetGraphicsManager()->SetViewport(windowHeight, windowWidth);
+      if(GameEngine::GetInstance()->GetSceneManager()->GetActiveScene())
+      {
+        GameEngine::GetInstance()->GetSceneManager()->GetActiveScene()->ViewSizeChanged();
+      }
     }
   }
     break;
