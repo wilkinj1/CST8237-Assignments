@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ResourceManager.h"
-#include <d3d.h>
 #include <D3D11.h>
 #include <D3DX11tex.h>
 #include <assert.h>
