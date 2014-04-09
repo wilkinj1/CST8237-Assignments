@@ -5,6 +5,7 @@
 #include "CollisionMesh.h"
 
 class Player;
+class Obstacle;
 class Model;
 
 class GameScene: public Scene
@@ -25,8 +26,8 @@ public:
   void HandleInput(float dt);
 
 protected:
-	Player *mPlayer;
-  Player *mSatellitePlayer;
+	Obstacle *mObstacle;
+  Player *mPlayer;
   float mDT;
   int mScore;
 
@@ -34,5 +35,5 @@ protected:
   PointLight mLight;
 
   std::vector<CollisionMesh> mCollidableObjects;
-  void CheckCollisions();
+  bool CheckCollisions();
 };

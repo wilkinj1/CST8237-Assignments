@@ -306,16 +306,6 @@ bool CollisionMesh::CheckCollisionsCustom(CollisionMesh &otherMesh)
       XMVECTOR otherVertex = XMLoadFloat3(&otherVertices[otherVertIndex].Position);
       XMVECTOR otherNormal = XMLoadFloat3(&otherVertices[otherVertIndex].Normal);
 
-      /*XMVECTOR difference = XMVectorSubtract(otherVertex, ourVertex);
-      XMFLOAT3 differenceDotValue, normalDotValue;
-      XMStoreFloat3(&differenceDotValue, XMVector3Dot(difference, otherNormal));
-      XMStoreFloat3(&normalDotValue, XMVector3Dot(otherNormal, ourNormal));
-
-      if (differenceDotValue.x > 0)
-      {
-        localCollision = false;
-      }*/
-
       XMVECTOR difference = XMVectorSubtract(ourVertex, otherVertex);
       XMFLOAT3 differenceDotValue, normalDotValue;
       XMVECTOR diffLength = XMVector3Length(difference);
@@ -382,5 +372,10 @@ bool CollisionMesh::CheckCollisionsCustom(CollisionMesh &otherMesh)
     }
   }
 
+  if(positions.size())
+  {
+    mDelegate->CollisionOccurred(otherMesh.mDelegate);
+    otherMesh.mDelegate->CollisionOccurred(mDelegate);
+  }
   return positions.size();
 }

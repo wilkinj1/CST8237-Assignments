@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include <d3d11.h>
 #include "Player.h"
+#include "Obstacle.h"
 #include "FocusCamera.h"
 
 #include "GameEngine.h"
@@ -14,8 +15,8 @@
 
 GameScene::GameScene(): Scene()
 {
-	mPlayer = NULL;
-  mSatellitePlayer = NULL;
+	mObstacle = NULL;
+  mPlayer = NULL;
   mDT = 10.0f;
   mScore = 0;
 }
@@ -28,10 +29,10 @@ GameScene::~GameScene()
     mPlayer = NULL;
 	}
 
-  if (mSatellitePlayer)
+  if (mObstacle)
   {
-    delete mSatellitePlayer;
-    mSatellitePlayer = NULL;
+    delete mObstacle;
+    mObstacle = NULL;
   }
 
   if (mLightModel)
@@ -45,11 +46,11 @@ void GameScene::Initialize()
 {
 	mSceneCamera = new FocusCamera(XM_PIDIV4, 1424.0f, 702.0f, XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f), XMFLOAT4(5.0f, 0.0f, -20.0f, 1.0f));
 	
-  mPlayer = new Player();
-	mPlayer->Initialize();
+  mObstacle = new Obstacle();
+	mObstacle->Initialize();
 
-  mSatellitePlayer = new Player();
-  mSatellitePlayer->Initialize();
+  mPlayer = new Player();
+  mPlayer->Initialize();
 
   mLightModel = ModelUtils::CreateCubeModelPCNT();
 
@@ -58,24 +59,24 @@ void GameScene::Initialize()
   mLight.diffuseColor = XMFLOAT3(1.0f, 1.0f, 1.0f);
   mLight.intensity = 1.0f;
 
-  XMFLOAT3 playerScale(5.0f, 5.0f, 5.0f);
-  mPlayer->SetScale(playerScale);
+  XMFLOAT3 obstacleScale(5.0f, 5.0f, 5.0f);
+  mObstacle->SetScale(obstacleScale);
 
-  XMFLOAT3 playerPosition(0.0f, 0.0f, 0.0f);
+  XMFLOAT3 obstaclePosition(0.0f, 0.0f, 0.0f);
+  mObstacle->SetPosition(obstaclePosition);
+
+  XMFLOAT3 playerPosition(8.0f, 0.0f, 0.0f);
   mPlayer->SetPosition(playerPosition);
 
-  XMFLOAT3 satellitePosition(8.0f, 0.0f, 0.0f);
-  mSatellitePlayer->SetPosition(satellitePosition);
-
-  mSceneCamera->SetLookAtTarget(XMFLOAT4(playerPosition.x, playerPosition.y, playerPosition.z, 1.0f));
+  mSceneCamera->SetLookAtTarget(XMFLOAT4(obstaclePosition.x, obstaclePosition.y, obstaclePosition.z, 1.0f));
 
   CollisionMesh playerMesh;
   playerMesh.Create(mPlayer->GetModel(), mPlayer);
   mCollidableObjects.push_back(playerMesh);
 
-  CollisionMesh satelliteMesh;
-  satelliteMesh.Create(mSatellitePlayer->GetModel(), mSatellitePlayer);
-  mCollidableObjects.push_back(satelliteMesh);
+  CollisionMesh obstacleMesh;
+  obstacleMesh.Create(mObstacle->GetModel(), mObstacle);
+  mCollidableObjects.push_back(obstacleMesh);
 
 	mIsInitialized = true;
 }
@@ -85,7 +86,7 @@ void GameScene::Update(float dt)
   HandleInput(dt);
 
   mPlayer->Update(dt);
-  mSatellitePlayer->Update(dt);
+  mObstacle->Update(dt);
 
 	mSceneCamera->Update(dt);
 
@@ -111,7 +112,7 @@ void GameScene::Paint()
   //matrix.PushMatrix(XMMatrixRotationRollPitchYaw(mPlayer->GetRotation().x, mPlayer->GetRotation().y, mPlayer->GetRotation().z));
   //matrix.PushMatrix(XMMatrixScaling(mPlayer->GetScale().x, mPlayer->GetScale().y, mPlayer->GetScale().z));
 
-  mSatellitePlayer->Paint(XMMatrixIdentity(), mSceneCamera, mLight.position);
+  mObstacle->Paint(XMMatrixIdentity(), mSceneCamera, mLight.position);
 }
 
 void GameScene::OnEnter() {   }
@@ -121,7 +122,7 @@ void GameScene::OnExit()
 
 void GameScene::HandleInput(float dt)
 {
-  Player *movingPlayer = mSatellitePlayer;
+  Player *movingPlayer = mPlayer;
   const float PlayerMovementSpeed = 5.0f;
   const float CameraMovementSpeed = 5.0f;
   const float CameraRotation = 20.0f;
@@ -211,8 +212,9 @@ void GameScene::HandleInput(float dt)
   //movingPlayer->SetPosition(oldPlayerPosition);
 }
 
-void GameScene::CheckCollisions()
+bool GameScene::CheckCollisions()
 {
+  bool collisionOccurred = false;
   for (int firstCollidableIndex = 0; firstCollidableIndex + 1 < mCollidableObjects.size(); firstCollidableIndex++)
   {
     CollisionMesh &firstMesh = mCollidableObjects[firstCollidableIndex];
@@ -222,15 +224,10 @@ void GameScene::CheckCollisions()
 
       if (&firstMesh != &secondMesh)
       {
-        if (firstMesh.CheckCollisionsCustom(secondMesh))
-        {
-          printf("We have a collision!\n");
-        }
-        else
-        {
-          printf("No collision!\n");
-        }
+        collisionOccurred = firstMesh.CheckCollisionsCustom(secondMesh);
       }
     }
   }
+
+  return collisionOccurred;
 }

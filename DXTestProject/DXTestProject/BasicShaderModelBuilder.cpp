@@ -26,7 +26,7 @@ Model* BasicShaderModelBuilder::Create(MODEL_DESC & const modelDesc)
   samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
   TEXTURE_DESC textureDesc;
-  textureDesc.filepath = L"./IC504917.png";
+  textureDesc.filepath = L"./testTexture.png";
   textureDesc.samplerDesc = &samplerDesc;
 
   return ModelBuilder::Create(modelDesc, vertexShaderDesc, pixelShaderDesc, textureDesc);

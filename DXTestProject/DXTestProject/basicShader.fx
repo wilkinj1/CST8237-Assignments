@@ -79,6 +79,6 @@ float4 BasicFragmentShader( FragmentShaderInput input ) : SV_TARGET
 	
 	/* We get the texture color from the texture based on the UV coordinate. */
 	float4 textureColor = mainTexture.Sample(textureState, input.texUV);
-	float3 finalColor = input.colour * (ambientColor + colour * diffuseTerm);
+	float3 finalColor = /*input.colour */ (ambientColor + colour * diffuseTerm);
 	return textureColor * float4(finalColor, 1.0f);
 }

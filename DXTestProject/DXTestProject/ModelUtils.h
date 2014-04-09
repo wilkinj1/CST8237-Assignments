@@ -11,11 +11,17 @@
 class ModelUtils
 {
 public:
-  /* Return a pre-made, fully UV-mapped cube.
+  /* Return a pre-made, fully UV-mapped cube made with the BasicShaderModelBuilder.
    * @return Pre-made cube model. 
    * WARNING: YOU MUST ENSURE THAT THE MEMORY IS FREED.
    */
   static Model* CreateCubeModelPCNT();
+
+  static Model* CreateCubeModelPCNTWithTextureDesc(TEXTURE_DESC textureDesc);
+
+  static Model* CreateCubeModelPCNTWithTextureFilename(wchar_t* filename);
+
+  static Model* CreateSquareSprite(wchar_t* filename);
 
   /* Destroys and frees any memory allocated using any of this class' creation method.
    * @param Model to destroy.

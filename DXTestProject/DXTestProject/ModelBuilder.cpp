@@ -31,7 +31,7 @@ Model* ModelBuilder::Create(MODEL_DESC & const modelDesc, SHADER_DESC & const ve
   HRESULT result;
   newModel->mTextureView = ResourceManager::GetInstance()->LoadTexture(textureDesc.filepath);
 
-  const D3D11_SAMPLER_DESC &samplerDesc = *textureDesc.samplerDesc;
+  D3D11_SAMPLER_DESC &samplerDesc = *textureDesc.samplerDesc;
 
   result = device->CreateSamplerState(&samplerDesc, &newModel->mTextureSamplerState);
   assert(SUCCEEDED(result));

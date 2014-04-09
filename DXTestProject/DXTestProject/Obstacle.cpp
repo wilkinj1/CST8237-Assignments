@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Player.h"
+#include "Obstacle.h"
 #include <assert.h>
 #include <string>
 
@@ -13,32 +13,32 @@
 #include "MatrixStack.h"
 #include "Camera.h"
 
-Player::Player(): 
+Obstacle::Obstacle(): 
 GameObject(),
-  mPlayerModel(NULL)
+  mObstacleModel(NULL)
 {
 }
 
-Player::~Player()
+Obstacle::~Obstacle()
 {
-  if(mPlayerModel)
+  if(mObstacleModel)
   {
-    ModelUtils::DestroyModel(mPlayerModel);
-    mPlayerModel = NULL;
+    ModelUtils::DestroyModel(mObstacleModel);
+    mObstacleModel = NULL;
   }
 }
 
-void Player::Initialize()
+void Obstacle::Initialize()
 {
-  mPlayerModel = ModelUtils::CreateCubeModelPCNTWithTextureFilename(L"./200px-A_dragon.PNG");
+  mObstacleModel = ModelUtils::CreateCubeModelPCNT();
 }
 
-void Player::Update(float dt)
+void Obstacle::Update(float dt)
 {
-  mPlayerModel->Update(dt);
+  mObstacleModel->Update(dt);
 }
 
-void Player::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
+void Obstacle::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
 {
   /* Since we're now leveraging the matrix stack, we can just push our transformation matrices right into it.
    * Remember that we push them in the OPPOSITE direction we expect them multiplied; it's LIFO, so we multiply
@@ -47,10 +47,10 @@ void Player::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
   matrix.PushMatrix(world);
   matrix.PushMatrix(GetWorldTransform());
 
-  mPlayerModel->Paint(matrix.GetCurrentMatrix(), camera, lightPos);
+  mObstacleModel->Paint(matrix.GetCurrentMatrix(), camera, lightPos);
 }
 
-XMMATRIX Player::GetWorldTransform()
+XMMATRIX Obstacle::GetWorldTransform()
 {
   MatrixStack matrix;
 
@@ -61,12 +61,12 @@ XMMATRIX Player::GetWorldTransform()
   return matrix.GetCurrentMatrix();
 }
 
-Model* Player::GetModel()
+Model* Obstacle::GetModel()
 {
-  return mPlayerModel;
+  return mObstacleModel;
 }
 
-void Player::CollisionOccurred(CollisionMeshDelegate *otherObject)
+void Obstacle::CollisionOccurred(CollisionMeshDelegate *otherObject)
 {
-  printf("Player collided with object!\n");
+  printf("Obstacle collided with object!\n");
 }

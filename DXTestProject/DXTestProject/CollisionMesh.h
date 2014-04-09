@@ -7,6 +7,7 @@ class CollisionMeshDelegate
 {
 public:
   virtual XMMATRIX GetWorldTransform() = 0;
+  virtual void CollisionOccurred(CollisionMeshDelegate *otherObject) {};
 };
 
 class CollisionMesh

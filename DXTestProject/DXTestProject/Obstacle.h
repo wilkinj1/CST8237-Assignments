@@ -6,11 +6,11 @@
 class Model;
 class Camera;
 
-class Player: public GameObject, public CollisionMeshDelegate
+class Obstacle: public GameObject, public CollisionMeshDelegate
 {
 public:
-	Player();
-	~Player();
+	Obstacle();
+	~Obstacle();
 
 	void Initialize();
 	void Update(float dt);
@@ -21,7 +21,7 @@ public:
   Model* GetModel();
 
 protected:
-  Model *mPlayerModel;
+  Model *mObstacleModel;
 
   void Paint(const XMMATRIX &world, const XMMATRIX &viewProj, const XMFLOAT4 &cameraPos) { }
   void CollisionOccurred(CollisionMeshDelegate *otherObject);
