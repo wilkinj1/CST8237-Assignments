@@ -13,6 +13,8 @@
 #include "BasicShaderModelBuilder.h"
 #include "ModelUtils.h"
 
+#include "EasyFont.h"
+
 GameScene::GameScene(): Scene()
 {
 	mObstacle = NULL;
@@ -44,8 +46,10 @@ GameScene::~GameScene()
 
 void GameScene::Initialize()
 {
+  GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
+
   RECT windowRect;
-  GetClientRect(GameEngine::GetInstance()->GetGraphicsManager()->GetWindowHandle(), &windowRect);
+  GetClientRect(gm->GetWindowHandle(), &windowRect);
 
 	size_t windowWidth = windowRect.right - windowRect.left;
 	size_t windowHeight = windowRect.bottom - windowRect.top;
@@ -56,6 +60,9 @@ void GameScene::Initialize()
 
   mPlayer = new Player();
   mPlayer->Initialize();
+
+  mFont = new EasyFont();
+  mFont->Initialize(gm->GetGraphicsDevice(), gm->GetGraphicsDeviceContext());
 
   mLightModel = ModelUtils::CreateCubeModelPCNT();
 
@@ -128,6 +135,8 @@ void GameScene::Paint()
   //matrix.PushMatrix(XMMatrixScaling(mPlayer->GetScale().x, mPlayer->GetScale().y, mPlayer->GetScale().z));
 
   mObstacle->Paint(XMMatrixIdentity(), mSceneCamera, mLight.position);
+
+  mFont->DrawString(GameEngine::GetInstance()->GetGraphicsManager()->GetGraphicsDeviceContext(), mSceneCamera->GetProjectionMatrix(), "Hello!", 0, 0);
 }
 
 void GameScene::OnEnter() {   }
@@ -151,18 +160,12 @@ void GameScene::HandleInput(float dt)
     position.x -= CameraMovementSpeed * dt;
     //mSceneCamera->SetPosition(position);
 
-    XMFLOAT3 angle;
-    angle.y = XMConvertToRadians(CameraRotation) * dt;
+    XMFLOAT3 angle(0.0f, XMConvertToRadians(CameraRotation) * dt, 0.0f);
     ((FocusCamera *)mSceneCamera)->RotateBy(angle);
   }
   else if (GetAsyncKeyState('D'))
   {
-    XMFLOAT4 position = mSceneCamera->GetPosition();
-    position.x += CameraMovementSpeed * dt;
-    //mSceneCamera->SetPosition(position);
-
-    XMFLOAT3 angle;
-    angle.y = XMConvertToRadians(-CameraRotation) * dt;
+    XMFLOAT3 angle(0.0f, XMConvertToRadians(-CameraRotation) * dt, 0.0f);
     ((FocusCamera *)mSceneCamera)->RotateBy(angle);
   }
   

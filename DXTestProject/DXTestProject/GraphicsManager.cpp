@@ -1,10 +1,15 @@
 #include "stdafx.h"
 #include "GraphicsManager.h"
-//#include <d3d.h>
 #include <D3D11.h>
 #include <d3dcompiler.h>
-//#include <d3dtypes.h>
 #include <stdio.h>
+#include "GraphicsIncludes.h"
+
+#ifndef OLD_DX_SDK
+#include "WICTextureLoader.cpp"
+#include "../DirectXTex/DirectXTex/DirectXTex.h"
+#pragma comment(lib, "DirectXTex.lib")
+#endif
 
 GraphicsManager::GraphicsManager() :
   mD3DBackBufferTarget(NULL),
@@ -230,8 +235,13 @@ ID3D11DeviceContext* GraphicsManager::GetGraphicsDeviceContext()
 	return mD3DDeviceContext;
 }
 
-/*HRESULT GraphicsManager::CompileShaderFromFile(const wchar_t *filename, const char *shaderEntryPoint, const char *shaderTarget, LPD3DBLOB *shaderData, LPD3DBLOB *errorData)
+HRESULT GraphicsManager::CompileShaderFromFile(const wchar_t *filename, const char *shaderEntryPoint, const char *shaderTarget, LPD3DBLOB *shaderData, LPD3DBLOB *errorData)
 {
+  HRESULT result = E_FAIL;
+
+#ifdef OLD_DX_SDK
+  result = D3DX11CompileFromFile(filename, NULL, NULL, shaderEntryPoint, shaderTarget, 0, 0, NULL, shaderData, errorData, NULL);
+#else
 	HANDLE fileHandle = CreateFile(filename, 
 		GENERIC_READ,
 		FILE_SHARE_READ,
@@ -242,7 +252,6 @@ ID3D11DeviceContext* GraphicsManager::GetGraphicsDeviceContext()
 
 	DWORD fileSize = GetFileSize(fileHandle, NULL);
 	char *fileBuffer = new char[fileSize];
-	HRESULT result = E_FAIL;
 	DWORD bytesRead = 0;
 
 	if(ReadFile(fileHandle, fileBuffer, fileSize, &bytesRead, NULL))
@@ -261,6 +270,34 @@ ID3D11DeviceContext* GraphicsManager::GetGraphicsDeviceContext()
 	}
 
 	delete[] fileBuffer;
+#endif
+	return result;
+}
+
+HRESULT GraphicsManager::CreateShaderResourceViewFromFile(ID3D11Device *device, ID3D11DeviceContext *dc, wchar_t *filename, ID3D11ShaderResourceView **resourceView)
+{
+  HRESULT result = E_FAIL;
+
+#ifdef OLD_DK_SDK
+	//If not, then we have to load it!
+	D3DX11_IMAGE_LOAD_INFO imageInfo;
+	result = D3DX11CreateShaderResourceViewFromFile(device, filename, &imageInfo, NULL, (ID3D11ShaderResourceView **)&toReturn, NULL);
+#else
+  ID3D11Texture2D *tex;
+  result = CreateWICTextureFromFile(device, dc, filename, (ID3D11Resource **)&tex, resourceView);
+  if (FAILED(result))
+  {
+    DirectX::TexMetadata md;
+    DirectX::ScratchImage img;
+    result = LoadFromDDSFile(filename, 0, &md, img);
+    result = CreateShaderResourceView(device, img.GetImages(), img.GetImageCount(), md, resourceView);
+  }
+#endif
+
+  if (FAILED(result))
+  {
+    printf("There was a problem loading \"%s\"\n", filename);
+  }
 
 	return result;
-}*/
+}

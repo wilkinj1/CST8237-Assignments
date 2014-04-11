@@ -16,6 +16,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Engine\EasyFont">
+      <UniqueIdentifier>{eb945ef5-a936-4063-8dc0-8dc5615d29b8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -102,6 +105,18 @@
     <ClInclude Include="Obstacle.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="WICTextureLoader.cpp">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="WICTextureLoader.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="EasyFont.h">
+      <Filter>Engine\EasyFont</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXTestProject.cpp">
@@ -163,6 +178,12 @@
     </ClCompile>
     <ClCompile Include="Obstacle.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EasyFont.cpp">
+      <Filter>Engine\EasyFont</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

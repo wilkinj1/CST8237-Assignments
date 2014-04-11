@@ -7,6 +7,7 @@
 class Player;
 class Obstacle;
 class Model;
+class EasyFont;
 
 class GameScene: public Scene
 {
@@ -34,6 +35,8 @@ protected:
 
   Model *mLightModel;
   PointLight mLight;
+
+  EasyFont *mFont;
 
   std::vector<CollisionMesh> mCollidableObjects;
   bool CheckCollisions();

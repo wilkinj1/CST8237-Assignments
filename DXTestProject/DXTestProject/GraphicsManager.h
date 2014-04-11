@@ -10,6 +10,7 @@ struct ID3D11RenderTargetView;
 struct ID3D11DepthStencilState;
 struct ID3D11DepthStencilView;
 struct ID3D11Texture2D;
+struct ID3D11ShaderResourceView;
 
 class GameEngine;
 
@@ -29,6 +30,7 @@ public:
   HINSTANCE GetWindowInstance();
 
 	static HRESULT CompileShaderFromFile(const wchar_t *filename, const char *shaderEntryPoint, const char *shaderTarget, LPD3DBLOB *shaderData, LPD3DBLOB *errorData);
+	static HRESULT CreateShaderResourceViewFromFile(ID3D11Device *device, ID3D11DeviceContext *dc, wchar_t *filename, ID3D11ShaderResourceView **resourceView);
 
 protected:
 	GraphicsManager(void);

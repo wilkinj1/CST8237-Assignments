@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ResourceManager.h"
 #include <D3D11.h>
-#include <D3DX11tex.h>
 #include <assert.h>
 #include <sstream>
 
@@ -58,16 +57,10 @@ ID3D11ShaderResourceView* ResourceManager::LoadTexture(TCHAR* filename)
   }
   else
   {
-    ID3D11Device *device = GameEngine::GetInstance()->GetGraphicsManager()->GetGraphicsDevice();
-
-    //If not, then we have to load it!
-    D3DX11_IMAGE_LOAD_INFO imageInfo;
-    HRESULT result = D3DX11CreateShaderResourceViewFromFile(device, filename, &imageInfo, NULL, (ID3D11ShaderResourceView **)&toReturn, NULL);
-
-    if (FAILED(result))
-    {
-      printf("There was a problem loading \"%s\"\n", filename);
-    }
+    GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
+    ID3D11Device *device = gm->GetGraphicsDevice();
+    ID3D11DeviceContext *dc = gm->GetGraphicsDeviceContext();
+    gm->CreateShaderResourceViewFromFile(device, dc, filename, (ID3D11ShaderResourceView **)&toReturn);
 
     ResourcePair entry = ResourcePair((ID3D11DeviceChild *)toReturn, 1);
     mLoadedResources.insert(std::pair<std::wstring, ResourcePair>(keyString, entry));
@@ -127,8 +120,7 @@ ID3D11DeviceChild* ResourceManager::LoadShaderAndInputLayout(SHADER_DESC desc, M
     ID3DBlob *shaderCode = NULL;
     ID3DBlob *errorMessage = nullptr;
 
-    //HRESULT result = GraphicsManager::CompileShaderFromFile(desc.filepath, esc.entryPoint, desc.profile, &shaderCode, &errorMessage);
-    HRESULT result = D3DX11CompileFromFile(desc.filepath, NULL, NULL, desc.entryPoint, desc.profile, 0, 0, NULL, &shaderCode, &errorMessage, NULL);
+    HRESULT result = GraphicsManager::CompileShaderFromFile(desc.filepath, desc.entryPoint, desc.profile, &shaderCode, &errorMessage);
 
     std::string profile = desc.profile;
     if (profile.find("vs") != std::string::npos)
@@ -201,3 +193,4 @@ bool ResourceManager::UnloadCachedResource(ID3D11DeviceChild **resource)
 
   return isLoaded;
 }
+

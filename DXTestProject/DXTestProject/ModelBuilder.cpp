@@ -17,7 +17,6 @@
 #include "GraphicsManager.h"
 
 #include <d3dcommon.h>
-#include <D3DX11async.h>
 #include "GraphicsIncludes.h"
 
 ModelBuilder::ModelBuilder() { }
