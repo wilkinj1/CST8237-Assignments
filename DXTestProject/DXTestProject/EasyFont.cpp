@@ -78,13 +78,13 @@ bool EasyFont::Initialize(ID3D11Device *device, ID3D11DeviceContext *dc)
   SHADER_DESC vertexShaderDesc;
   vertexShaderDesc.filepath = L"./EasyFont/Effects.fx";
   vertexShaderDesc.entryPoint = "FONT_VS";
-  vertexShaderDesc.profile = "vs_5_0";
+  vertexShaderDesc.profile = "vs_4_0";
 
   SHADER_DESC pixelShaderDesc;
   ZeroMemory(&pixelShaderDesc, sizeof(pixelShaderDesc));
   pixelShaderDesc.filepath = L"./EasyFont/Effects.fx";
   pixelShaderDesc.entryPoint = "FONT_PS";
-  pixelShaderDesc.profile = "ps_5_0";
+  pixelShaderDesc.profile = "ps_4_0";
 
   MODEL_DESC modelDesc;
   ZeroMemory(&modelDesc, sizeof(modelDesc));

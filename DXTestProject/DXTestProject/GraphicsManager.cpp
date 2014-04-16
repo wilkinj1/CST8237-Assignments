@@ -281,7 +281,7 @@ HRESULT GraphicsManager::CreateShaderResourceViewFromFile(ID3D11Device *device, 
 #ifdef OLD_DX_SDK
 	//If not, then we have to load it!
 	D3DX11_IMAGE_LOAD_INFO imageInfo;
-	result = D3DX11CreateShaderResourceViewFromFile(device, filename, &imageInfo, NULL, (ID3D11ShaderResourceView **)&resourceView, NULL);
+	result = D3DX11CreateShaderResourceViewFromFile(device, filename, &imageInfo, NULL, resourceView, NULL);
 #else
   ID3D11Texture2D *tex;
   result = CreateWICTextureFromFile(device, dc, filename, (ID3D11Resource **)&tex, resourceView);
