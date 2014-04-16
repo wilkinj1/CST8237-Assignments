@@ -63,13 +63,13 @@ void Animation::Initialize(const char *filename)
 
   if (doc.HasMember("animationData"))
   {
-    AnimationFrame frame;
-    frame.startX = 0.0f;
-    frame.startY = 0.0f;
-    frame.width = mTextureSize.x;
-    frame.height = mTextureSize.y;
+    AnimationFrameData frameData;
+    frameData.startX = 0.0f;
+    frameData.startY = 0.0f;
+    frameData.width = mTextureSize.x;
+    frameData.height = mTextureSize.y;
 
-    std::pair<std::string, AnimationFrame> animationPair("", frame);
+    std::pair<std::string, AnimationFrameData> animationPair("", frameData);
     mAnimationData.insert(animationPair);
 
     rapidjson::Value& animationData = doc["animationData"];
@@ -78,22 +78,32 @@ void Animation::Initialize(const char *filename)
     {
       rapidjson::Value& animationFrame = animItr->value;
 
-      frame.startX = animationFrame["startX"].GetDouble();
-      frame.startY = animationFrame["startY"].GetDouble();
-      frame.width = animationFrame["width"].GetDouble();
-      frame.height = animationFrame["height"].GetDouble();
+      frameData.startX = animationFrame["startX"].GetDouble();
+      frameData.startY = animationFrame["startY"].GetDouble();
+      frameData.width = animationFrame["width"].GetDouble();
+      frameData.height = animationFrame["height"].GetDouble();
 
-      std::pair<std::string, AnimationFrame> animationPair(animItr->name.GetString(), frame);
+      std::pair<std::string, AnimationFrameData> animationPair(animItr->name.GetString(), frameData);
       mAnimationData.insert(animationPair);
     }
   }
 
   if (doc.HasMember("animations"))
   {
-    std::vector<std::string> frames;
-    frames.push_back("");
-    std::pair<std::string, std::vector<std::string> > sequence("", frames);
-    mAnimations.insert(sequence);
+    std::vector<SequenceFrame> frames;
+
+    SequenceFrame frame;
+    frame.animationKey = "";
+    frame.duration = 0.0f;
+    frames.push_back(frame);
+
+    AnimationSequence sequence;
+    sequence.name = "";
+    sequence.looping = false;
+    sequence.frames = frames;
+
+    std::pair<std::string, AnimationSequence> sequencePair(sequence.name, sequence);
+    mAnimations.insert(sequencePair);
 
     rapidjson::Value& animations = doc["animations"];
     rapidjson::Value::ValueIterator animItr = animations.Begin();
@@ -104,15 +114,24 @@ void Animation::Initialize(const char *filename)
         frames.clear();
         rapidjson::Value& animation = *animItr;
 
-        std::vector<std::string> frames;
+        std::vector<SequenceFrame> frames;
         rapidjson::Value::ValueIterator frameItr = animation["frames"].Begin();
         for (; frameItr != animation["frames"].End(); frameItr++)
         {
-          frames.push_back(frameItr->GetString());
+          rapidjson::Value& frameValue = *frameItr;
+
+          frame.animationKey = frameValue["key"].GetString();
+          frame.duration = frameValue["duration"].GetDouble();
+
+          frames.push_back(frame);
         }
 
-        sequence = std::pair<std::string, std::vector<std::string> >(animation["name"].GetString(), frames);
-        mAnimations.insert(sequence);
+        sequence.name = animation["name"].GetString();
+        sequence.looping = animation["looping"].GetBool();
+        sequence.frames = frames;
+
+        sequencePair = std::pair<std::string, AnimationSequence>(sequence.name, sequence);
+        mAnimations.insert(sequencePair);
       }
     }
   }
@@ -132,7 +151,6 @@ void Animation::Play(const char *animationName)
 {
   if (HasAnimation(animationName))
   {
-    std::vector<std::string> &animationSequence = mAnimations[animationName];
     mCurrentAnimationName = animationName;
     mCurrentState = PLAYING;
   }
@@ -151,7 +169,7 @@ void Animation::Stop()
   if (mCurrentState == PLAYING || mCurrentState == PAUSED)
   {
     mCurrentFrameIndex = 0;
-    //mCurrentState = STOPPED;
+    mCurrentState = STOPPED;
   }
 }
 
@@ -162,21 +180,27 @@ void Animation::Update(float dt)
     mAnimationTime -= dt;
     if (mAnimationTime <= 0.0f)
     {
-      mAnimationTime = 1.0f;
       mCurrentFrameIndex++;
-      if (mCurrentFrameIndex >= mAnimations[mCurrentAnimationName].size())
+      AnimationSequence &sequence = mAnimations[mCurrentAnimationName];
+
+      if (mCurrentFrameIndex >= sequence.frames.size() && !sequence.looping)
       {
         Stop();
-      }      
+      }
+      else
+      {
+        mCurrentFrameIndex %= sequence.frames.size();
+        mAnimationTime = sequence.frames[mCurrentFrameIndex].duration;
+      }
     }
   }
 }
 
 void Animation::SetAnimationProperties(ID3D11DeviceContext *dc)
 {
-  std::vector<std::string> &currentSequence = mAnimations[mCurrentAnimationName];
-  std::string &currentFrameKey = currentSequence[mCurrentFrameIndex];
-  AnimationFrame currentFrame = mAnimationData[currentFrameKey];
+  AnimationSequence &currentSequence = mAnimations[mCurrentAnimationName];
+  SequenceFrame &currentSequenceFrame = currentSequence.frames[mCurrentFrameIndex];
+  AnimationFrameData currentFrame = mAnimationData[currentSequenceFrame.animationKey];
 
   // do setup for the next frame.
   XMFLOAT4 animationFrameData;

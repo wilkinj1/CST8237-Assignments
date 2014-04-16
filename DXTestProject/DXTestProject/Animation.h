@@ -8,12 +8,25 @@ struct ID3D11Buffer;
 struct ID3D11ShaderResourceView;
 struct ID3D11DeviceContext;
 
-struct AnimationFrame
+struct AnimationFrameData
 {
   float startX;
   float startY;
   float width;
   float height;
+};
+
+struct SequenceFrame
+{
+  std::string animationKey;
+  float duration;
+};
+
+struct AnimationSequence
+{
+  std::string name;
+  bool looping;
+  std::vector<SequenceFrame> frames;
 };
 
 enum AnimationState
@@ -54,6 +67,6 @@ protected:
   float mAnimationTime;
   ID3D11Buffer *mAnimationFrameBuffer;
 
-  std::map<std::string, AnimationFrame> mAnimationData;
-  std::map<std::string, std::vector<std::string> > mAnimations;
+  std::map<std::string, AnimationFrameData> mAnimationData;
+  std::map<std::string, AnimationSequence> mAnimations;
 };
