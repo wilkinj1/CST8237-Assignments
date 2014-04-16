@@ -30,7 +30,8 @@ Obstacle::~Obstacle()
 
 void Obstacle::Initialize()
 {
-  mObstacleModel = ModelUtils::CreateCubeModelPCNT();
+  //mObstacleModel = ModelUtils::CreateCubeModelPCNT();
+  mObstacleModel = ModelUtils::CreateCubeModelPCNTWithTextureFilename(L"./200px-A_dragon.PNG");
 }
 
 void Obstacle::Update(float dt)

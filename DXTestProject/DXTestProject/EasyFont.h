@@ -12,6 +12,7 @@ struct ID3D10Blob;
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct ID3D11InputLayout;
+class Camera;
 
 class EasyFont
 {
@@ -20,7 +21,7 @@ public:
   bool Initialize(ID3D11Device *device, ID3D11DeviceContext *dc);
 
   //Font Stuff
-  bool DrawString(ID3D11DeviceContext *dc, XMMATRIX& projection, char* text, float posX, float posY);
+  bool DrawString(ID3D11DeviceContext *dc, Camera *camera, char* text, float posX, float posY);
 
 private:
   ID3D11Buffer*	vertexBuffer;		//VertexBuffer

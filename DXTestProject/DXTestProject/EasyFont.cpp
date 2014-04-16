@@ -5,16 +5,13 @@
 
 #include "GameEngine.h"
 #include "GraphicsManager.h"
+#include "Camera.h"
 
 // Font Rendering
 //----------------------------
 int numLetters = 32;
 float textureWidth = 1024.0f;
 //-----------------------------
-
-// Konstanten die Höhe und Breite des Fensters festlegen.
-const int Width = 800;
-const int Height = 600;
 
 struct cbPerObject
 {
@@ -29,7 +26,7 @@ struct Vertex
     : pos(x, y, z), texCoord(u, v){}
   XMFLOAT3 pos;
   XMFLOAT2 texCoord;
-  XMFLOAT3 padding;
+  //XMFLOAT3 padding;
 };
 
 // Input Layout Descriptor
@@ -116,7 +113,7 @@ bool EasyFont::Initialize(ID3D11Device *device, ID3D11DeviceContext *dc)
 }
 
 //Font Stuff
-bool EasyFont::DrawString(ID3D11DeviceContext *dc, XMMATRIX& projection, char* text, float posX, float posY)
+bool EasyFont::DrawString(ID3D11DeviceContext *dc, Camera *camera, char* text, float posX, float posY)
 {
   UINT stride = sizeof(Vertex);
   UINT offset = 0;
@@ -125,7 +122,7 @@ bool EasyFont::DrawString(ID3D11DeviceContext *dc, XMMATRIX& projection, char* t
   dc->PSSetShader(FONT_PS, 0, 0);
 
   cbPerObject cbPerObj;
-  cbPerObj.WVP = XMMatrixTranspose(projection);
+  cbPerObj.WVP = XMMatrixTranspose(camera->GetProjectionMatrix());
 
   dc->UpdateSubresource(cbPerObjectBuffer, 0, NULL, &cbPerObj, 0, 0);
   dc->VSSetConstantBuffers(0, 1, &cbPerObjectBuffer);
@@ -147,8 +144,8 @@ bool EasyFont::DrawString(ID3D11DeviceContext *dc, XMMATRIX& projection, char* t
     textSize = numLetters;
 
   // size of one char on screen
-  float cScreenWidth = 32.0f / Width;
-  float cScreenHeight = 32.0f / Height;
+  float cScreenWidth = 32.0f / camera->GetViewSize().x;
+  float cScreenHeight = 32.0f / camera->GetViewSize().y;
   // texel Size
   float texelWidth = 32.0f / textureWidth;
 

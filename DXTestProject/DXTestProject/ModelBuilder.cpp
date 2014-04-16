@@ -23,9 +23,10 @@ ModelBuilder::ModelBuilder() { }
 
 Model* ModelBuilder::Create(MODEL_DESC & const modelDesc, SHADER_DESC & const vertexDesc, SHADER_DESC & const pixelDesc, TEXTURE_DESC & const textureDesc)
 {
-	Model *newModel = new Model();
-	GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
+  GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
   ID3D11Device *device = gm->GetGraphicsDevice();
+
+  Model *newModel = Create(modelDesc, vertexDesc, pixelDesc);
 
   HRESULT result;
   newModel->mTextureView = ResourceManager::GetInstance()->LoadTexture(textureDesc.filepath);
@@ -35,6 +36,15 @@ Model* ModelBuilder::Create(MODEL_DESC & const modelDesc, SHADER_DESC & const ve
   result = device->CreateSamplerState(&samplerDesc, &newModel->mTextureSamplerState);
   assert(SUCCEEDED(result));
 
+  return newModel;
+}
+
+Model* ModelBuilder::Create(MODEL_DESC & const modelDesc, SHADER_DESC & const vertexDesc, SHADER_DESC & const pixelDesc)
+{
+	Model *newModel = new Model();
+	GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
+  ID3D11Device *device = gm->GetGraphicsDevice();
+
   D3D11_BUFFER_DESC matrixBufferDesc;
   ZeroMemory(&matrixBufferDesc, sizeof(matrixBufferDesc));
   matrixBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -42,7 +52,7 @@ Model* ModelBuilder::Create(MODEL_DESC & const modelDesc, SHADER_DESC & const ve
   matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
 	// Create the constant buffer for our world-view-projection matrix;
-  result = device->CreateBuffer(&matrixBufferDesc, NULL, &newModel->mMatrixBuffer);
+  HRESULT result = device->CreateBuffer(&matrixBufferDesc, NULL, &newModel->mMatrixBuffer);
 
   D3D11_BUFFER_DESC lightBufferDesc;
   ZeroMemory(&lightBufferDesc, sizeof(lightBufferDesc));
@@ -95,10 +105,10 @@ void ModelBuilder::Destroy(Model *model)
 		model->mVertexBuffer = NULL;
 	}
 
-  ResourceManager::GetInstance()->UnloadResource<ID3D11InputLayout>(&model->mInputLayout);
-  ResourceManager::GetInstance()->UnloadResource<ID3D11VertexShader>(&model->mVertexShader);
-  ResourceManager::GetInstance()->UnloadResource<ID3D11PixelShader>(&model->mFragmentShader);
-  ResourceManager::GetInstance()->UnloadResource<ID3D11ShaderResourceView>(&model->mTextureView);
+  ResourceManager::GetInstance()->UnloadResource<ID3D11InputLayout *>(&model->mInputLayout);
+  ResourceManager::GetInstance()->UnloadResource<ID3D11VertexShader *>(&model->mVertexShader);
+  ResourceManager::GetInstance()->UnloadResource<ID3D11PixelShader *>(&model->mFragmentShader);
+  ResourceManager::GetInstance()->UnloadResource<ID3D11ShaderResourceView *>(&model->mTextureView);
 
 	if(model->mMatrixBuffer)
 	{

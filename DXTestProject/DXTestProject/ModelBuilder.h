@@ -20,6 +20,15 @@ public:
    */
   static Model* Create(MODEL_DESC & const modelDesc, SHADER_DESC & const vertexDesc, SHADER_DESC & const pixelDesc, TEXTURE_DESC & const textureDesc);
 
+  /** Creates a new Model object based on the descriptions given.
+  * @param modelDesc The description of the model to be made.
+  * @param vertexDesc The description of the vertex shader to be made.
+  * @param pixelDesc The description of the pixel shader to be made.
+  * WARNING: ANY MODELS MADE USING THIS METHOD NEED TO BE FREED USING DESTROY.
+  */
+  static Model* Create(MODEL_DESC & const modelDesc, SHADER_DESC & const vertexDesc, SHADER_DESC & const pixelDesc);
+
+
   /** Frees the memory of a given model.
    * @param model The model to be cleaned up.
    */

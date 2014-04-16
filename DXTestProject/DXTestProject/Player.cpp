@@ -13,6 +13,8 @@
 #include "MatrixStack.h"
 #include "Camera.h"
 
+#include "Animation.h"
+
 Player::Player(): 
 GameObject(),
   mPlayerModel(NULL)
@@ -30,7 +32,10 @@ Player::~Player()
 
 void Player::Initialize()
 {
-  mPlayerModel = ModelUtils::CreateCubeModelPCNTWithTextureFilename(L"./200px-A_dragon.PNG");
+  //mPlayerModel = ModelUtils::CreateCubeModelPCNTWithTextureFilename(L"./200px-A_dragon.PNG");
+  mPlayerModel = ModelUtils::CreateCubeModelPCNTWithAnimationFilename(L"./trogdor.anim");
+  Animation *anim = mPlayerModel->GetAnimation();
+  anim->Play("walk");
 }
 
 void Player::Update(float dt)

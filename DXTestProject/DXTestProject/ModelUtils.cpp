@@ -4,6 +4,7 @@
 #include "ModelUtils.h"
 #include "BasicShaderModelBuilder.h"
 #include "TexturedModelBuilder.h"
+#include "AnimatedTexturedModelBuilder.h"
 
 static VertexPositionColorNormalTextureUVDescription cubeVertices[] =
 {
@@ -158,6 +159,19 @@ Model* ModelUtils::CreateSquareSprite(wchar_t* filename)
   textureDesc.samplerDesc = &samplerDesc;
 
   return TexturedModelBuilder::Create(modelDescription, textureDesc);
+}
+
+Model* ModelUtils::CreateCubeModelPCNTWithAnimationFilename(wchar_t* filename)
+{
+  MODEL_DESC modelDescription;
+  modelDescription.modelData = cubeVertices;
+  modelDescription.sizeOfData = sizeof(cubeVertices);
+  modelDescription.sizeOfVertexDesc = sizeof(VertexPositionColorNormalTextureUVDescription);
+  modelDescription.vertexCount = ARRAYSIZE(cubeVertices);
+  modelDescription.elementDescs = pcntElementDesciptions;
+  modelDescription.elementCount = ARRAYSIZE(pcntElementDesciptions);
+
+  return AnimatedTexturedModelBuilder::Create(modelDescription, filename);
 }
 
 void ModelUtils::DestroyModel(Model *model)

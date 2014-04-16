@@ -23,6 +23,8 @@ public:
 
   static Model* CreateSquareSprite(wchar_t* filename);
 
+  static Model* CreateCubeModelPCNTWithAnimationFilename(wchar_t* filename);
+
   /* Destroys and frees any memory allocated using any of this class' creation method.
    * @param Model to destroy.
    */

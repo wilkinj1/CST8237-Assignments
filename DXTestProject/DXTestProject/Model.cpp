@@ -22,7 +22,8 @@ GameObject(),
 	mMatrixBuffer(NULL),
   mLightBuffer(NULL),
   mVertices(NULL),
-  mNumberOfVertices(NULL)
+  mNumberOfVertices(NULL),
+  mAnimation(NULL)
 {
 }
 
@@ -36,6 +37,10 @@ void Model::Initialize()
 
 void Model::Update(float dt)
 {
+  if (mAnimation)
+  {
+    mAnimation->Update(dt);
+  }
 }
 
 void Model::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
@@ -70,6 +75,11 @@ void Model::Paint(const XMMATRIX &world, Camera *camera, XMFLOAT3 lightPos)
   dc->UpdateSubresource(mLightBuffer, 0, 0, &lightPos, 0, 0);
   dc->VSSetConstantBuffers(1, 1, &mLightBuffer);
 
+  if (mAnimation)
+  {
+    mAnimation->SetAnimationProperties(dc);
+  }
+
 	dc->Draw(mNumberOfVertices, 0);
 }
 
@@ -80,4 +90,14 @@ int Model::GetVertexCount()
 const std::vector<VertexPositionColorNormalTextureUVDescription> Model::GetVertices()
 {
   return mVertices;
+}
+
+void Model::SetAnimation(Animation *animation)
+{
+  mAnimation = animation;
+}
+
+Animation* Model::GetAnimation()
+{
+  return mAnimation;
 }

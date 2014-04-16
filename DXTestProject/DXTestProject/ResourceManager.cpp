@@ -41,7 +41,7 @@ ResourceManager::~ResourceManager()
   }
 }
 
-ID3D11ShaderResourceView* ResourceManager::LoadTexture(TCHAR* filename)
+ID3D11ShaderResourceView* ResourceManager::LoadTexture(const TCHAR* filename)
 {
   std::wstring keyString = filename;
   ID3D11ShaderResourceView *toReturn = nullptr;
@@ -84,8 +84,9 @@ ID3D11DeviceChild* ResourceManager::LoadShaderAndInputLayout(SHADER_DESC desc, M
   ID3D11DeviceChild *toReturn = nullptr;
   bool success = true;
   std::string entryPointName = desc.entryPoint;
-  wchar_t *entryPointWC = new wchar_t[entryPointName.size()];
+  wchar_t *entryPointWC = new wchar_t[entryPointName.size() + 1];
   mbstowcs(entryPointWC, entryPointName.c_str(), entryPointName.size());
+  entryPointWC[entryPointName.size()] = L'\0';
 
   std::wstringstream keyStream;
   keyStream << desc.filepath << L"-" << entryPointWC;

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Camera.h"
+#include "GraphicsManager.h"
+#include "GameEngine.h"
 
 Camera::Camera()
 {
@@ -149,6 +151,11 @@ void Camera::CalculateProjectionMatrix()
 	if(mRecalculateProjectionMatrix)
 	{
 		XMMATRIX projectionMatrix = XMMatrixPerspectiveFovLH(mFOV, mAspectRatio, 0.1f, 1000.0f);
+    GraphicsManager *gm = GameEngine::GetInstance()->GetGraphicsManager();
+    RECT clientRect;
+    GetClientRect(gm->GetWindowHandle(), &clientRect);
+
+    XMMATRIX newProjectionMatrix = XMMatrixPerspectiveOffCenterLH(clientRect.left, clientRect.right, clientRect.bottom, clientRect.top, 0.1f, 1000.0f);
 		XMStoreFloat4x4(&mProjectionMatrix, projectionMatrix);
 		mRecalculateProjectionMatrix = false;
 	}

@@ -51,11 +51,11 @@ public:
 
   ~ResourceManager();
 
-  ID3D11ShaderResourceView* LoadTexture(TCHAR* filename);
+  ID3D11ShaderResourceView* LoadTexture(const TCHAR* filename);
   ID3D11VertexShader* LoadVertexShaderAndInputLayout(SHADER_DESC desc, MODEL_DESC* input = NULL, ID3D11InputLayout** layout = NULL);
   ID3D11PixelShader* LoadPixelShader(SHADER_DESC desc);
 
-  template <class T> bool UnloadResource(T **resource)
+  template <class T> bool UnloadResource(T *resource)
   {
     return UnloadCachedResource((ID3D11DeviceChild **)resource);
   }

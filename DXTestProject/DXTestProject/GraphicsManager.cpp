@@ -7,7 +7,7 @@
 
 #ifndef OLD_DX_SDK
 #include "WICTextureLoader.cpp"
-#include "../DirectXTex/DirectXTex/DirectXTex.h"
+#include "DirectXTex/DirectXTex.h"
 #pragma comment(lib, "DirectXTex.lib")
 #endif
 
@@ -274,7 +274,7 @@ HRESULT GraphicsManager::CompileShaderFromFile(const wchar_t *filename, const ch
 	return result;
 }
 
-HRESULT GraphicsManager::CreateShaderResourceViewFromFile(ID3D11Device *device, ID3D11DeviceContext *dc, wchar_t *filename, ID3D11ShaderResourceView **resourceView)
+HRESULT GraphicsManager::CreateShaderResourceViewFromFile(ID3D11Device *device, ID3D11DeviceContext *dc, const wchar_t *filename, ID3D11ShaderResourceView **resourceView)
 {
   HRESULT result = E_FAIL;
 

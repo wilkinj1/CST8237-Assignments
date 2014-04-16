@@ -14,6 +14,7 @@
 #include "ModelUtils.h"
 
 #include "EasyFont.h"
+#include "Animation.h"
 
 GameScene::GameScene(): Scene()
 {
@@ -63,6 +64,9 @@ void GameScene::Initialize()
 
   mFont = new EasyFont();
   mFont->Initialize(gm->GetGraphicsDevice(), gm->GetGraphicsDeviceContext());
+
+  Animation anim;
+  anim.Initialize("./trogdor.anim");
 
   mLightModel = ModelUtils::CreateCubeModelPCNT();
 
@@ -136,7 +140,8 @@ void GameScene::Paint()
 
   mObstacle->Paint(XMMatrixIdentity(), mSceneCamera, mLight.position);
 
-  mFont->DrawString(GameEngine::GetInstance()->GetGraphicsManager()->GetGraphicsDeviceContext(), mSceneCamera->GetProjectionMatrix(), "Hello!", 0, 0);
+  ID3D11DeviceContext *dc = GameEngine::GetInstance()->GetGraphicsManager()->GetGraphicsDeviceContext();
+  mFont->DrawString(dc, mSceneCamera, "HELLO!", 0, 0);
 }
 
 void GameScene::OnEnter() {   }

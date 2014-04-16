@@ -117,6 +117,12 @@
     <ClInclude Include="Animation.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="AnimatedTexturedModelBuilder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringUtils.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXTestProject.cpp">
@@ -184,6 +190,12 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimatedTexturedModelBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StringUtils.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

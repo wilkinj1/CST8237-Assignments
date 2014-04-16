@@ -1,0 +1,30 @@
+{
+    "filename": "./200px-A_dragon2.png",
+    "size": {
+        "width": 400,
+        "height": 166
+    },
+    "animationData": {
+        "0": {
+            "startX": 0,
+            "startY": 0,
+            "width": 200,
+            "height": 166
+        },
+        "1": {
+            "startX": 200,
+            "startY": 0,
+            "width": 200,
+            "height": 166
+        }
+    },
+    "animations": [
+        {
+            "name": "walk",
+            "frames": [
+                "0",
+				"1"
+            ]
+        }
+    ]
+}

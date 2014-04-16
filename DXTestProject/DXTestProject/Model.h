@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include <vector>
 #include "ResourceManager.h"
+#include "Animation.h"
 
 struct ID3D11Buffer;
 struct ID3D11DeviceContext;
@@ -45,6 +46,9 @@ public:
   const std::vector<VPCNTDesc> GetVertices();
   int GetVertexCount();
 
+  Animation* GetAnimation();
+  void SetAnimation(Animation *animation);
+
 protected:
   friend class ModelBuilder;
   Model();
@@ -60,6 +64,8 @@ protected:
 
   ID3D11ShaderResourceView *mTextureView;
   ID3D11SamplerState *mTextureSamplerState;
+
+  Animation *mAnimation;
 
   std::vector<VPCNTDesc> mVertices;
   int mNumberOfVertices;
