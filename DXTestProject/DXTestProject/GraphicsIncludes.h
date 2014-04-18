@@ -9,7 +9,6 @@
 #include <xnamath.h>
 #include <D3DX11tex.h>
 #include <D3DX11async.h>
-#include <d3dtypes.h>
 
 #pragma comment(lib, "d3dx11.lib")
 #pragma comment(lib, "dxerr.lib")
